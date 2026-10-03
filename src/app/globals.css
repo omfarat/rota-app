@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-sand-50: #faf7f2;
+  --color-sand-100: #f3ede2;
+  --color-sand-200: #e6dbc9;
+  --color-ink-900: #1a1614;
+  --color-ink-700: #453c36;
+  --color-ink-500: #6f6259;
+  --color-ink-400: #94847a;
+  --color-terra-600: #b04a25;
+  --color-terra-500: #c9603a;
+  --color-aegean-600: #1f5f73;
+  --color-aegean-500: #2b7d94;
+  --color-moss-600: #4a6b3d;
+}
+
+html {
+  background: var(--color-sand-50);
+}
+
+body {
+  color: var(--color-ink-900);
+  -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.35s ease-out both;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
