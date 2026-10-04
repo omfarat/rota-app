@@ -1,7 +1,7 @@
 // Resolves every internal link the way a static host does, so a link that only
 // works because of a dev-server fallback is caught before deploy.
 import { readdirSync, readFileSync, existsSync, statSync } from "node:fs";
-import { join, dirname, resolve } from "node:path";
+import { join, resolve } from "node:path";
 
 const ROOT = resolve("out");
 

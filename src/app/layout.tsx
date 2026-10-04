@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { allCities } from "@/lib/data";
+import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,7 +21,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="tr">
-      <body className="min-h-dvh bg-sand-50 font-sans antialiased">{children}</body>
+      <body className="min-h-dvh bg-sand-50 font-sans antialiased">
+        {children}
+        <ServiceWorkerRegister />
+      </body>
     </html>
   );
 }

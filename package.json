@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test src/**/*.test.ts",
     "test:browser": "node scripts/browser-smoke.mjs",
+    "test:offline": "node scripts/offline-test.mjs",
     "check:encoding": "node scripts/check-encoding.mjs",
     "verify:links": "node scripts/verify-links.mjs",
     "data": "node scripts/fetch-data.mjs",
