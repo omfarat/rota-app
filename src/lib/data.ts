@@ -1,9 +1,7 @@
 import citiesJson from "@/data/cities.json";
-import poisJson from "@/data/pois.json";
-import type { City, Poi } from "./types";
+import type { City } from "./types";
 
 const cities = citiesJson as City[];
-const pois = poisJson as Record<string, Poi[]>;
 
 export function allCities(): City[] {
   return [...cities].sort((a, b) => a.name.localeCompare(b.name, "tr"));
@@ -13,12 +11,8 @@ export function getCity(slug: string): City | undefined {
   return cities.find((c) => c.slug === slug);
 }
 
-export function getPois(slug: string): Poi[] {
-  return pois[slug] ?? [];
-}
-
 export function hasData(slug: string): boolean {
-  return Boolean(pois[slug]?.length);
+  return (getCity(slug)?.poiCount ?? 0) > 0;
 }
 
 const trAlphabet =

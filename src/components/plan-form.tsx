@@ -6,14 +6,29 @@ import type { City, DurationId } from "@/lib/types";
 import { THEMES, DURATIONS, DEFAULT_DURATION, type Theme } from "@/lib/types";
 import { useMyLocation } from "@/components/use-my-location";
 
-export function PlanForm({ city }: { city: City }) {
+export function PlanForm({
+  city,
+  themeCounts,
+}: {
+  city: City;
+  themeCounts: Partial<Record<Theme, number>>;
+}) {
   const router = useRouter();
-  const [theme, setTheme] = useState<Theme>("genel");
   const [length, setLength] = useState<DurationId>(DEFAULT_DURATION);
   const [start, setStart] = useState<"center" | "here">("center");
   const { coords, error, loading, request } = useMyLocation();
 
   const chosen = DURATIONS.find((l) => l.id === length) ?? DURATIONS[0];
+
+  // 54 of 81 cities have no viewpoint at all, and the nominal default theme is
+  // empty in 33 of them, so an empty choice must never be the landing state.
+  const countOf = (id: Theme) => themeCounts[id] ?? 0;
+  const has = (id: Theme) => countOf(id) > 0;
+  const richestTheme = (): Theme =>
+    [...THEMES].sort((a, b) => countOf(b.id) - countOf(a.id))[0]?.id ?? "genel";
+
+  const [theme, setTheme] = useState<Theme>(richestTheme);
+  const themeIsUsable = has(theme);
 
   function go() {
     const params = new URLSearchParams({ tema: theme, sure: length, baslangic: start });
@@ -29,25 +44,43 @@ export function PlanForm({ city }: { city: City }) {
       <section>
         <h2 className="mb-3 text-sm font-bold text-ink-700">Nasıl gezmek istersin?</h2>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-          {THEMES.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => setTheme(t.id)}
-              aria-pressed={theme === t.id}
-              className={`rounded-2xl border p-3 text-left transition ${
-                theme === t.id
-                  ? "border-terra-500 bg-terra-500/5 ring-1 ring-terra-500"
-                  : "border-sand-200 bg-white hover:border-ink-400"
-              }`}
-            >
-              <span className="text-xl">{t.icon}</span>
-              <span className="mt-1 block text-sm font-semibold">{t.label}</span>
-              <span className="mt-0.5 block text-xs leading-snug text-ink-400">
-                {t.blurb}
-              </span>
-            </button>
-          ))}
+          {THEMES.map((t) => {
+            const count = countOf(t.id);
+            const empty = count === 0;
+            const selected = theme === t.id && !empty;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setTheme(t.id)}
+                disabled={empty}
+                aria-pressed={selected}
+                title={empty ? `${city.name} için veri yok` : undefined}
+                className={`rounded-2xl border p-3 text-left transition ${
+                  empty
+                    ? "cursor-not-allowed border-sand-200 bg-sand-100/60 opacity-60"
+                    : selected
+                      ? "border-terra-500 bg-terra-500/5 ring-1 ring-terra-500"
+                      : "border-sand-200 bg-white hover:border-ink-400"
+                }`}
+              >
+                <span className="flex items-baseline justify-between gap-1">
+                  <span className="text-xl">{t.icon}</span>
+                  <span className="text-xs font-semibold text-ink-400">{count}</span>
+                </span>
+                <span className="mt-1 block text-sm font-semibold">{t.label}</span>
+                <span className="mt-0.5 block text-xs leading-snug text-ink-400">
+                  {empty ? "Bu şehirde veri yok" : t.blurb}
+                </span>
+              </button>
+            );
+          })}
         </div>
+        {!themeIsUsable && (
+          <p className="mt-3 rounded-2xl border border-sand-200 bg-sand-100 px-4 py-3 text-sm text-ink-600">
+            {city.name} için bu temada veri yok. Aşağıdaki rotayı oluşturmak için
+            başka bir tema seç.
+          </p>
+        )}
       </section>
 
       <section>
@@ -119,7 +152,7 @@ export function PlanForm({ city }: { city: City }) {
 
       <button
         onClick={go}
-        disabled={start === "here" && !coords}
+        disabled={!themeIsUsable || (start === "here" && !coords)}
         className="w-full rounded-2xl bg-ink-900 px-5 py-4 text-center font-semibold text-white transition hover:bg-ink-700 disabled:opacity-40"
       >
         Rotayı oluştur

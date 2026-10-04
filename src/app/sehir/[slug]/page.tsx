@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { allCities, getCity, getPois, hasData } from "@/lib/data";
-import { THEMES } from "@/lib/types";
+import { allCities, getCity, hasData } from "@/lib/data";
+import { getPois } from "@/lib/pois";
+import { THEMES, type Theme } from "@/lib/types";
 import { PlanForm } from "@/components/plan-form";
 
 export function generateStaticParams() {
@@ -16,8 +17,12 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
   const pois = getPois(slug);
   const available = hasData(slug);
 
-  const themeCounts = new Map<string, number>();
-  for (const p of pois) themeCounts.set(p.theme, (themeCounts.get(p.theme) ?? 0) + 1);
+  const counts = Object.fromEntries(
+    pois.reduce(
+      (m, p) => m.set(p.theme, (m.get(p.theme) ?? 0) + 1),
+      new Map<string, number>(),
+    ),
+  ) as Partial<Record<Theme, number>>;
 
   const famous = pois.slice(0, 6);
 
@@ -112,26 +117,31 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
             </section>
           )}
 
-          <PlanForm city={city} />
+          <PlanForm city={city} themeCounts={counts} />
 
           <section className="mt-10">
             <h2 className="mb-3 text-sm font-bold text-ink-700">
               Veride ne var?
             </h2>
             <ul className="divide-y divide-sand-200 overflow-hidden rounded-2xl border border-sand-200 bg-white text-sm">
-              {THEMES.map((t) => (
-                <li
-                  key={t.id}
-                  className="flex items-center justify-between px-4 py-2.5"
-                >
-                  <span>
-                    {t.icon} {t.label}
-                  </span>
-                  <span className="text-ink-400">
-                    {themeCounts.get(t.id) ?? 0} yer
-                  </span>
-                </li>
-              ))}
+              {THEMES.map((t) => {
+                const count = counts[t.id] ?? 0;
+                return (
+                  <li
+                    key={t.id}
+                    className={`flex items-center justify-between px-4 py-2.5 ${
+                      count === 0 ? "text-ink-400/70" : ""
+                    }`}
+                  >
+                    <span>
+                      {t.icon} {t.label}
+                    </span>
+                    <span className="text-ink-400">
+                      {count === 0 ? "veri yok" : `${count} yer`}
+                    </span>
+                  </li>
+                );
+              })}
             </ul>
           </section>
         </>

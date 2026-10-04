@@ -1,6 +1,9 @@
 import type { MetadataRoute } from "next";
 import { allCities } from "@/lib/data";
 
+// A static export refuses to prerender an implicit route handler.
+export const dynamic = "force-static";
+
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Rota — Türkiye şehir rotaları",
