@@ -159,7 +159,7 @@ for (const [slug, tema, sure] of cases) {
   const stops = stopMatch ? Number(stopMatch[1]) : -1;
   const hasMaps = (await page.locator('a[href*="google.com/maps"]').count()) > 0;
   const hasApple = (await page.locator('a[href*="maps.apple.com"]').count()) > 0;
-  const noStops = text.includes("uygun durak kalmadÄ±");
+  const noStops = text.includes("uygun durak kalmadı");
 
   rows.push([
     `${slug}/${tema}/${sure}`,
