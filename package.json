@@ -21,6 +21,9 @@
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
+  "config": {
+    "playwright_skip_browser_download": "1"
+  },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
