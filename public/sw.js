@@ -90,7 +90,7 @@ async function networkFirstPage(request) {
     const response = await fetch(request);
     if (response.ok) cache.put(request, response.clone());
     return response;
-  } catch (err) {
+  } catch {
     const cached = await matchAnyCache(request);
     if (cached) return cached;
     return offlineResponse();
