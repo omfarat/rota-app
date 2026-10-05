@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import { readFileSync } from "node:fs";
 
-const BASE = "http://localhost:3001";
+const BASE = process.env.BASE ?? "http://localhost:3001";
 const cities = JSON.parse(readFileSync("./src/data/cities.json", "utf8"));
 
 const browser = await chromium.launch();
