@@ -1,5 +1,6 @@
 import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { CITIES } from "./cities.mjs";
 
@@ -9,6 +10,11 @@ const OUT = path.join(ROOT, "src", "data");
 const UA = "rota-app/0.1 (turkiye-seyahat-rotasi; educational prototype)";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Cache keys for a batch must follow the batch, not its position: the QID list
+// grows between runs, so a positional key hands back yesterday's shorter chunk
+// and silently drops everything that was appended to it.
+const digest = (s) => createHash("sha1").update(s).digest("hex").slice(0, 16);
 
 // PowerShell writes a BOM by default; strip it or JSON.parse throws.
 async function readJson(file) {
@@ -261,6 +267,121 @@ async function nominatimElements(city, deadline = Infinity, reachKm = Infinity) 
   return out;
 }
 
+// Turkish labels and descriptions keep their diacritics, and JS \b only knows
+// about ASCII, so every rule below runs against an ASCII fold of the text.
+const ascii = (s) =>
+  s
+    .replace(/ı/g, "i").replace(/İ/g, "I").replace(/ş/g, "s").replace(/Ş/g, "S")
+    .replace(/ğ/g, "g").replace(/Ğ/g, "G").replace(/ü/g, "u").replace(/Ü/g, "U")
+    .replace(/ö/g, "o").replace(/Ö/g, "O").replace(/ç/g, "c").replace(/Ç/g, "C")
+    .toLowerCase();
+
+// Something the visitor can stand in front of...
+const WD_SIGHT =
+  /\bmuze|kale|kilise|cami|mescit|medrese|turbe|anit|oren|harabe|sarn|kervansaray|hamam|bedesten|saray|kumbet|hoyuk|manast|sinagog|havra|\bburc\b|\bkule\b|tekke|\bhan\b|kopru|magara|carsi|selale|mesire|piknik|anitevi/i;
+// ...and not a settlement, a landform or a piece of civic furniture. Wikidata
+// descriptions are explicit about these ("Türkiye'de dağ", "Şırnak ilinin
+// merkezi olan şehir"), so they are dropped on sight.
+const WD_SKIP =
+  /\bkoy|beldesi|ilcesi|ilinin|belediye|mahalle|istasyon|niversitesi|\blise\b|\bokul\b|stadyum|kulup|secim|parti|deresi|nehir|\bdagi\b|\btepe\b|\bdag\b|\bvadi\b|baraj|nufus|yuzolcumu|hastane|karakol|hukumet|kurumu|dernegi|hazire/i;
+
+// The description doubles as the category: "Hakkari merkezde medrese, müze"
+// says what the label alone cannot, and it is what themeFor/priorityFor read.
+function wdTags(label, desc) {
+  const t = ascii(`${label} ${desc}`);
+  if (/\bmuze/.test(t)) return { tourism: "museum" };
+  if (/cami|mescit/.test(t)) return { amenity: "place_of_worship" };
+  if (/kilise|manast/.test(t)) return { historic: "church" };
+  if (/kale|hisar/.test(t)) return { historic: "castle" };
+  if (/turbe|kumbet/.test(t)) return { historic: "tomb" };
+  if (/selale|mesire|piknik/.test(t)) return { tourism: "viewpoint" };
+  if (/kopru|hamam|medrese|\bhan\b|kervansaray|sarn|oren|harabe|anit|burc|bedesten|carsi|hoyuk|sinagog|havra|saray|kule|tekke/.test(t)) {
+    return { historic: "monument" };
+  }
+  return {};
+}
+
+// Overpass only sees what somebody bothered to tag, which leaves the museums
+// and castles of thinly mapped towns invisible. Wikidata is queried by radius
+// instead of by tag, so it finds them whether or not OSM ever heard of them.
+async function wikidataElements(city, reachKm) {
+  let rows;
+  try {
+    rows = await cached(`wdloc-${city.slug}.json`, async () => {
+      const query =
+        "SELECT ?item ?itemLabel ?coord ?desc WHERE {\n" +
+        "  SERVICE wikibase:around {\n" +
+        `    ?item wdt:P625 ?coord.\n` +
+        `    bd:serviceParam wikibase:center "Point(${city.lon} ${city.lat})"^^geo:wktLiteral.\n` +
+        `    bd:serviceParam wikibase:radius "${reachKm.toFixed(1)}".\n` +
+        "  }\n" +
+        '  ?item rdfs:label ?itemLabel. FILTER(LANG(?itemLabel) = "tr")\n' +
+        '  OPTIONAL { ?item schema:description ?desc. FILTER(LANG(?desc) = "tr") }\n' +
+        "} LIMIT 400";
+      const url =
+        "https://query.wikidata.org/sparql?format=json&query=" +
+        encodeURIComponent(query);
+      const res = await fetchRetry(
+        url,
+        { headers: { Accept: "application/sparql-results+json" } },
+        2,
+        45000,
+      );
+      const json = await res.json();
+      return json.results.bindings;
+    });
+  } catch (err) {
+    return { elements: [], problems: [`wikidata: ${err.message}`] };
+  }
+
+  const out = [];
+  const seen = new Set();
+  let noDesc = 0;
+  let skipped = 0;
+  for (const r of rows) {
+    const m = String(r.coord.value).match(/Point\(([-\d.]+) ([-\d.]+)\)/);
+    if (!m) continue;
+    const lat = Number(m[2]);
+    const lon = Number(m[1]);
+    if (haversine(city, { lat, lon }) > reachKm) continue;
+    const name = fixName(r.itemLabel.value);
+    const desc = r.desc?.value || "";
+    // Without a description there is no way to tell a monument from an event
+    // that merely happened at these coordinates ("Şırnak Çatışması").
+    if (!desc) {
+      noDesc++;
+      continue;
+    }
+    const text = ascii(`${name} ${desc}`);
+    if (WD_SKIP.test(text) || !WD_SIGHT.test(text)) {
+      skipped++;
+      continue;
+    }
+    const qid = r.item.value.split("/").pop();
+    if (seen.has(qid)) continue;
+    seen.add(qid);
+    out.push({
+      type: "wikidata",
+      id: `wd/${qid}`,
+      lat,
+      lon,
+      center: null,
+      tags: {
+        ...wdTags(name, desc),
+        name,
+        "name:tr": name,
+        wikidata: qid,
+        description: desc,
+      },
+    });
+  }
+  const problems = [];
+  if (process.env.DEBUG_FUNNEL && (noDesc || skipped)) {
+    problems.push(`wikidata: aciklama yok=${noDesc} atlandi=${skipped} tutan=${out.length}`);
+  }
+  return { elements: out, problems };
+}
+
 async function overpass(city, index) {
   const set = QUERY_SETS[index];
   const b = bbox(city, set.scale);
@@ -391,7 +512,7 @@ WHERE {
   OPTIONAL { ?article schema:about ?item ; schema:isPartOf <https://tr.wikipedia.org/> . }
 }
 GROUP BY ?item ?label ?description ?image ?heritageLabel ?typeLabel`;
-    Object.assign(map, await sparql(q, `wd-${prefix}-${i}-${chunk[0]}.json`));
+    Object.assign(map, await sparql(q, `wde-${prefix}-${digest(chunk.join(" "))}.json`));
     process.stdout.write(`\r  wikidata ${Math.min(i + 40, ids.length)}/${ids.length}`);
   }
   return map;
@@ -612,13 +733,16 @@ async function main() {
 
     try {
       const reach = Math.min(city.radius, 0.2) * 111 * 1.7;
-      // The Wikipedia card and the OSM extracts are independent, so overlap them.
-      const [card, osm] = await Promise.all([
+      // The Wikipedia card, the OSM extracts and Wikidata are independent, so
+      // they are overlapped.
+      const [card, osm, wds] = await Promise.all([
         cityCard(city),
         overpassAll(city, reach),
+        wikidataElements(city, reach),
       ]);
       const { elements, problems } = osm;
-      if (problems.length) console.warn(`  ! atlanan sorgu ${problems.join(" | ")}`);
+      const allProblems = [...problems, ...wds.problems];
+      if (allProblems.length) console.warn(`  ! atlanan sorgu ${allProblems.join(" | ")}`);
 
       const merged = new Map();
       let tooFar = 0;
@@ -629,10 +753,26 @@ async function main() {
         }
         if (!merged.has(p.id)) merged.set(p.id, p);
       }
+      const osmQids = new Set(
+        [...merged.values()].map((p) => p.wikidata).filter(Boolean),
+      );
+      let fromWikidata = 0;
+      for (const p of normalize(wds.elements)) {
+        if (osmQids.has(p.wikidata)) continue;
+        if (haversine(city, p) > reach) {
+          tooFar++;
+          continue;
+        }
+        if (!merged.has(p.id)) {
+          merged.set(p.id, p);
+          fromWikidata++;
+        }
+      }
       if (process.env.DEBUG_FUNNEL) {
         console.warn(
-          `  [reach] ${city.name}: normalize=${normalize(elements).length} ` +
-            `cokUzak=${tooFar} kabul=${merged.size} reach=${reach.toFixed(1)}km`,
+          `  [reach] ${city.name}: osm=${normalize(elements).length} ` +
+            `wikidata=${fromWikidata} cokUzak=${tooFar} kabul=${merged.size} ` +
+            `reach=${reach.toFixed(1)}km`,
         );
       }
 
@@ -678,7 +818,12 @@ async function main() {
 
       // The same place is often mapped twice: once as a node, once as a way,
       // and sometimes under a slightly different name ("Arasta- Kapalı Çarşı").
-      const samePlace = (a, b) => {
+      // Wikidata and OSM disagree about names outright ("Nesturi Koçanis
+      // Kilisesi" vs "The Patriarchal Church of Qudshanis"), so the two are
+      // also merged by position: 50 m puts the mirrored duplicates together
+      // while leaving the Kilim and Travma museums 68 m apart.
+      const samePlace = (a, b, distanceKm) => {
+        if (distanceKm < 0.05) return true;
         if (a === b) return true;
         const shorter = a.length < b.length ? a : b;
         const longer = a.length < b.length ? b : a;
@@ -686,9 +831,10 @@ async function main() {
       };
       const deduped = [];
       for (const item of items) {
-        const twin = deduped.find(
-          (d) => samePlace(d.name, item.name) && haversine(d, item) < 0.4,
-        );
+        const twin = deduped.find((d) => {
+          const km = haversine(d, item);
+          return km < 0.4 && samePlace(d.name, item.name, km);
+        });
         if (!twin) deduped.push(item);
       }
 
