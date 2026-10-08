@@ -8,7 +8,7 @@
     "lon": 35.3213,
     "summary": "Adana, Türkiye'nin Adana ilinin merkezi olan şehridir. Seyhan, Yüreğir, Çukurova ve Sarıçam olmak üzere 4 ilçeye bölünür. Türkiye'deki yedinci büyük metropolitan alan olup, ülkenin önde gelen tarım, ticaret ve kültür merkezlerinden biridir. Türkiye'deki maden zengini 4. bölge olan Adana; krom, demir, manganez, kurşun ve çinko yatakları açısından önem taşımaktadır.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Varda_Demiryolu_Koprusu.jpg/960px-Varda_Demiryolu_Koprusu.jpg",
-    "highlight": "İlter Uzel Tıp ve Diş Hekimliği Müzesi",
+                      "highlight":  "Varda Demiryolu Köprüsü",
     "poiCount": 127,
     "districts": [
       "Seyhan",
@@ -40,7 +40,7 @@
     "lon": 38.2786,
     "summary": "Adıyaman, Türkiye'nin aynı adlı Adıyaman ilinin merkezi olan şehirdir. Kuzeyden Çelikhan, doğudan Kâhta, güneydoğudan Samsat ve Atatürk Baraj Gölü ile, güneyden Fırat Nehri ve batıdan Besni ve Tut ilçeleri ile çevrilidir. Önceleri şehir merkezindeki kale etrafında konumlanan yerleşim, il merkezi olduğu 1954 yılından itibaren genişlemiş ve büyümüştür.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/AdiyamanUhrturm.jpg/960px-AdiyamanUhrturm.jpg",
-    "highlight": "Adıyaman Ulu Camii",
+                      "highlight":  "Adıyaman Saat Kulesi",
     "poiCount": 58,
     "districts": [
       "Ulucami Mahallesi",
@@ -66,7 +66,7 @@
     "lon": 30.5403,
     "summary": "Afyonkarahisar veya eski ve halk arasındaki ismiyle Afyon, Türkiye'nin Afyonkarahisar ilinin merkezi olan şehirdir. Mermercilik, termal turizmi ve gastronomi sektörlerinde Türkiye içinde ve uluslararası alanda isim yapmıştır. Şehrin Afyon olan ismi, 2005 yılında Afyonkarahisar olarak değiştirilmiştir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Burgberg_Afyonkarahisar_02.jpg/960px-Burgberg_Afyonkarahisar_02.jpg",
-    "highlight": "Anadolu'nun Orta Çağ Dönemi Ahşap Hipostil Camileri",
+                      "highlight":  "Afyonkarahisar Kalesi",
     "poiCount": 125,
     "districts": [
       "Akmescit",
@@ -2228,7 +2228,7 @@
     "lon": 29.4082,
     "summary": "Uşak, Ege Bölgesi üzerinde yer alan Uşak ilinin merkezi olan şehirdir. Uşak ilinin deniz seviyesinden yüksekliği 920 metredir. Uşak merkez ilçesinin yüzölçümü 1.655 km²dir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/U%C5%9Fak_Kurtulu%C5%9F_An%C4%B1t%C4%B1_ve_Atat%C3%BCrk_Heykeli.jpg/960px-U%C5%9Fak_Kurtulu%C5%9F_An%C4%B1t%C4%B1_ve_Atat%C3%BCrk_Heykeli.jpg",
-    "highlight": "Uşak Arkeoloji Müzesi",
+                      "highlight":  "Uşak Kurtuluş Anıtı",
     "poiCount": 117,
     "districts": [
       "Kurtuluş Mahallesi",
