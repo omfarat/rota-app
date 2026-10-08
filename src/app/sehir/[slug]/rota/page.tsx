@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { allCities, getCity } from "@/lib/data";
@@ -11,6 +12,23 @@ import { RoutePlanner } from "@/components/route-planner";
  */
 export function generateStaticParams() {
   return allCities().map((c) => ({ slug: c.slug }));
+}
+
+/**
+ * The route itself is built from the query string, so its HTML is the same for
+ * every theme/duration combination. Keeping it out of the index avoids flooding
+ * search results with duplicates; the city page is the canonical entry point.
+ */
+export async function generateMetadata(
+  props: PageProps<"/sehir/[slug]/rota">,
+): Promise<Metadata> {
+  const { slug } = await props.params;
+  const city = getCity(slug);
+  return {
+    title: city ? `${city.name} gezi rotası` : "Gezi rotası",
+    robots: { index: false, follow: true },
+    alternates: { canonical: `/sehir/${slug}/` },
+  };
 }
 
 /**

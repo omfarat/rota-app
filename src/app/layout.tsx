@@ -1,12 +1,39 @@
 import type { Metadata, Viewport } from "next";
-import { allCities } from "@/lib/data";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import { ServiceWorkerRegister } from "@/components/service-worker-register";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Rota — Türkiye'de şehir rotaları",
-  description: `Türkiye'nin ${allCities().length} ilinde gezilecek yerleri listele, seçtiğin yerlerden en kısa yürüyüş rotasını oluştur.`,
-  applicationName: "Rota",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Rota — Türkiye'de şehir rotaları",
+    template: `%s · ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "tr_TR",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: "Rota — Türkiye'de şehir rotaları",
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "Rota",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Rota — Türkiye'de şehir rotaları",
+    description: SITE_DESCRIPTION,
+    images: ["/icon-512.png"],
+  },
   appleWebApp: { capable: true, title: "Rota", statusBarStyle: "default" },
   icons: {
     icon: [

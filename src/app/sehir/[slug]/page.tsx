@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { allCities, getCity, hasData } from "@/lib/data";
@@ -8,6 +9,32 @@ import { PlanForm } from "@/components/plan-form";
 
 export function generateStaticParams() {
   return allCities().map((c) => ({ slug: c.slug }));
+}
+
+export async function generateMetadata(
+  props: PageProps<"/sehir/[slug]">,
+): Promise<Metadata> {
+  const { slug } = await props.params;
+  const city = getCity(slug);
+  if (!city) return {};
+
+  const title = `${city.name} gezilecek yerler ve rota`;
+  const description =
+    city.summary?.slice(0, 160) ??
+    `${city.name}'da gezilecek ${city.poiCount} yer arasından seç, en kısa yürüyüş rotasını oluştur.`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/sehir/${city.slug}/` },
+    openGraph: {
+      type: "article",
+      title,
+      description,
+      url: `/sehir/${city.slug}/`,
+      images: city.photo ? [{ url: city.photo }] : undefined,
+    },
+  };
 }
 
 export default async function CityPage(props: PageProps<"/sehir/[slug]">) {

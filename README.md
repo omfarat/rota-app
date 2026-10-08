@@ -6,6 +6,10 @@ hesaplanıyor, hava durumu çalışma anında Open-Meteo'dan çekiliyor.
 
 **Canlı:** https://rota-app-bg1.pages.dev
 
+> Özel alan adı eklenince build sırasında `NEXT_PUBLIC_SITE_URL` ortam
+> değişkenini ayarlayın; `metadataBase`, `robots.txt` ve `sitemap.xml` bu
+> değeri kullanır (bkz. Cloudflare dağıtımı).
+
 ## Nasıl çalışır
 
 - **Tema** — tarih, müze, lezzet, doğa, manzara. Neredeyse her şehir için en
@@ -30,7 +34,7 @@ Doğrulama:
 ```bash
 npm run typecheck      # tsc --noEmit
 npm run lint
-npm test               # 12 birim testi (rota motoru + veri butunlugu)
+npm test               # 18 birim testi (rota motoru + veri butunlugu)
 npm run check:encoding # Turkce karakter bozulmasi denetimi
 npm run verify:links   # out/ icindeki her baglantiyi statik sunucu gibi cozer
 
@@ -54,7 +58,7 @@ BASE=https://rota-app-bg1.pages.dev npm run test:browser
 | URL biçimi | `trailingSlash: true` — statik hostların okuduğu `index.html` düzeni |
 | Rota hesabı | İstemcide; 1458 tema×süre kombinasyonu için 1458 HTML yerine 81 sayfa |
 | Hava durumu | İstemcide, 30 dakikalık `localStorage` önbelleği |
-| Veri | `src/data/pois.json`, 6078 POI, derlenmiş olarak pakette |
+| Veri | `src/data/pois.json`, 7991 POI, derlenmiş olarak pakette |
 | Depolama | Sunucu yok; hesap, veritabanı, API anahtarı yok |
 | PWA | Service worker: sayfalar network-first, `_next/static` cache-first |
 
@@ -65,10 +69,10 @@ ziyaret edildikçe cache'e girer.
 ## Veri
 
 Noktalar OpenStreetMap'ten Overpass API ile, görseller Wikimedia Commons'tan
-çekildi. Lisanslar ODbL (veri) ve CC (görseller). Ölçek: 81 il, 6078 POI,
-ortalama il başına 75.
+çekildi. Lisanslar ODbL (veri) ve CC (görseller). Ölçek: 81 il, 7991 POI,
+ortalama il başına 99.
 
-Görsel oranı düşük (%8). Veriyi tazelemek için `npm run data` Overpass'ten
+Görsel oranı düşük (%15). Veriyi tazelemek için `npm run data` Overpass'ten
 çeker ve `.cache/` altında biriktirir.
 
 ## Dikkat çeken noktalar
@@ -95,3 +99,7 @@ GitHub'a push olunca Cloudflare Pages otomatik build alır:
 - Build output: `out`
 - Framework preset: `None`
 - Environment: `NODE_VERSION=22`
+
+Özel alan adı eklenince `NEXT_PUBLIC_SITE_URL=https://<domain>` ortam
+değişkenini ekleyip yeniden deploy edin; aksi halde canonical/OG/sitemap
+URL'leri `pages.dev` adresini gösterir.
