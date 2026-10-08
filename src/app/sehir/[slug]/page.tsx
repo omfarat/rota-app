@@ -21,7 +21,7 @@ export async function generateMetadata(
   const title = `${city.name} gezilecek yerler ve rota`;
   const description =
     city.summary?.slice(0, 160) ??
-    `${city.name}'da gezilecek ${city.poiCount} yer arasından seç, en kısa yürüyüş rotasını oluştur.`;
+    `${city.name}'da gezilecek ${city.poiCount} yer arasÄ±ndan seÃ§, en kÄ±sa yÃ¼rÃ¼yÃ¼Å rotasÄ±nÄ± oluÅtur.`;
 
   return {
     title,
@@ -59,7 +59,7 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
         href="/"
         className="mb-4 inline-flex items-center gap-1.5 text-sm text-ink-500 transition hover:text-terra-600"
       >
-        ← Tüm şehirler
+        â TÃ¼m Åehirler
       </Link>
 
       <div className="relative mb-6 aspect-[16/10] w-full overflow-hidden rounded-3xl bg-sand-200">
@@ -74,19 +74,19 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
           />
         ) : (
           <div className="flex h-full items-center justify-center text-4xl">
-            🏙️
+            ðï¸
           </div>
         )}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-900/85 to-transparent p-5 pt-16">
           <p className="text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
-            {city.region} · {city.plate}
+            {city.region} Â· {city.plate}
           </p>
           <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl">
             {city.name}
           </h1>
           <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/85">
             <span>{city.poiCount} gezilecek yer</span>
-            {city.highlight && <span className="truncate">· {city.highlight}</span>}
+            {city.highlight && <span className="truncate">Â· {city.highlight}</span>}
           </p>
         </div>
       </div>
@@ -94,8 +94,8 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
       {city.summary && (
         <details className="group mb-6 rounded-2xl border border-sand-200 bg-white px-4 py-3">
           <summary className="cursor-pointer list-none text-sm font-medium text-ink-700 marker:hidden">
-            {city.summary.slice(0, 110)}…{" "}
-            <span className="text-terra-600 group-open:hidden">devamı</span>
+            {city.summary.slice(0, 110)}â¦{" "}
+            <span className="text-terra-600 group-open:hidden">devamÄ±</span>
           </summary>
           <p className="mt-2 text-sm leading-relaxed text-ink-500">
             {city.summary}
@@ -106,7 +106,7 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
       {!available ? (
         <div className="rounded-2xl border border-sand-200 bg-white p-6 text-center">
           <p className="text-sm text-ink-500">
-            {city.name} için henüz veri toplanmadı.
+            {city.name} iÃ§in henÃ¼z veri toplanmadÄ±.
           </p>
         </div>
       ) : (
@@ -144,6 +144,12 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
             </section>
           )}
 
+                    <Link
+            href={`/sehir/${city.slug}/gun-gun`}
+            className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-sand-300 bg-white px-4 py-2 text-sm font-medium text-ink-700 shadow-sm transition hover:bg-sand-100"
+          >
+            Tüm yerleri gün gün sýrala
+          </Link>
           <PlanForm city={city} themeCounts={counts} />
 
           <section className="mt-10">
@@ -176,3 +182,4 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
     </main>
   );
 }
+

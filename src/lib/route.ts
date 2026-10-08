@@ -302,9 +302,9 @@ export function reorder(
   order: number[],
   origin: LatLon = plan.city,
 ): RoutePlan {
-  const stops = order.map((idx, i) => {
-    const s = plan.stops[idx];
-    const prev = i === 0 ? origin : stops[order[i - 1]];
+  const tmp: any[] = order.map((idx) => plan.stops[idx]);
+  const stops: any[] = tmp.map((s, i) => {
+    const prev = i === 0 ? origin : tmp[i - 1];
     const d = haversineKm(prev, s);
     return {
       ...s,
@@ -334,4 +334,9 @@ export function formatDuration(minutes: number): string {
   if (!h) return `${m} dk`;
   if (!m) return `${h} saat`;
   return `${h} sa ${m} dk`;
+}
+export function reorderPois(pois: any[], startLat: number, startLon: number): any[] {
+  const order = pois.map((_: any, i: number) => i);
+  const res = reorder({ stops: pois } as any, order, { lat: startLat, lon: startLon } as any) as any;
+  return res.stops || pois;
 }
