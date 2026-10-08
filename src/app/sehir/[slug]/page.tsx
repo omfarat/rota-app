@@ -21,7 +21,7 @@ export async function generateMetadata(
   const title = `${city.name} gezilecek yerler ve rota`;
   const description =
     city.summary?.slice(0, 160) ??
-    `${city.name}'da gezilecek ${city.poiCount} yer arasÃÂÃÂ±ndan seÃÂÃÂ§, en kÃÂÃÂ±sa yÃÂÃÂ¼rÃÂÃÂ¼yÃÂÃÂ¼ÃÂÃÂ rotasÃÂÃÂ±nÃÂÃÂ± oluÃÂÃÂtur.`;
+    `${city.name}'da gezilecek ${city.poiCount} yer arasÃƒÂƒÃ‚Â„ÃƒÂ‚Ã‚Â±ndan seÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â§, en kÃƒÂƒÃ‚Â„ÃƒÂ‚Ã‚Â±sa yÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â¼rÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â¼yÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â¼ÃƒÂƒÃ‚Â…ÃƒÂ‚Ã‚ÂŸ rotasÃƒÂƒÃ‚Â„ÃƒÂ‚Ã‚Â±nÃƒÂƒÃ‚Â„ÃƒÂ‚Ã‚Â± oluÃƒÂƒÃ‚Â…ÃƒÂ‚Ã‚ÂŸtur.`;
 
   return {
     title,
@@ -59,7 +59,7 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
         href="/"
         className="mb-4 inline-flex items-center gap-1.5 text-sm text-ink-500 transition hover:text-terra-600"
       >
-        ÃÂ¢ÃÂÃÂ TÃÂÃÂ¼m ÃÂÃÂehirler
+        ÃƒÂƒÃ‚Â¢ÃƒÂ‚Ã‚Â†ÃƒÂ‚Ã‚Â TÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â¼m ÃƒÂƒÃ‚Â…ÃƒÂ‚Ã‚ÂŸehirler
       </Link>
 
       <div className="relative mb-6 aspect-[16/10] w-full overflow-hidden rounded-3xl bg-sand-200">
@@ -74,19 +74,19 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
           />
         ) : (
           <div className="flex h-full items-center justify-center text-4xl">
-            ÃÂ°ÃÂÃÂÃÂÃÂ¯ÃÂ¸ÃÂ
+            ÃƒÂƒÃ‚Â°ÃƒÂ‚Ã‚ÂŸÃƒÂ‚Ã‚ÂÃƒÂ‚Ã‚Â™ÃƒÂƒÃ‚Â¯ÃƒÂ‚Ã‚Â¸ÃƒÂ‚Ã‚Â
           </div>
         )}
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-900/85 to-transparent p-5 pt-16">
           <p className="text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
-            {city.region} ÃÂÃÂ· {city.plate}
+            {city.region} ÃƒÂƒÃ‚Â‚ÃƒÂ‚Ã‚Â· {city.plate}
           </p>
           <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl">
             {city.name}
           </h1>
           <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/85">
             <span>{city.poiCount} gezilecek yer</span>
-            {city.highlight && <span className="truncate">ÃÂÃÂ· {city.highlight}</span>}
+            {city.highlight && <span className="truncate">ÃƒÂƒÃ‚Â‚ÃƒÂ‚Ã‚Â· {city.highlight}</span>}
           </p>
         </div>
       </div>
@@ -94,8 +94,8 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
       {city.summary && (
         <details className="group mb-6 rounded-2xl border border-sand-200 bg-white px-4 py-3">
           <summary className="cursor-pointer list-none text-sm font-medium text-ink-700 marker:hidden">
-            {city.summary.slice(0, 110)}ÃÂ¢ÃÂÃÂ¦{" "}
-            <span className="text-terra-600 group-open:hidden">devamÃÂÃÂ±</span>
+            {city.summary.slice(0, 110)}ÃƒÂƒÃ‚Â¢ÃƒÂ‚Ã‚Â€ÃƒÂ‚Ã‚Â¦{" "}
+            <span className="text-terra-600 group-open:hidden">devamÃƒÂƒÃ‚Â„ÃƒÂ‚Ã‚Â±</span>
           </summary>
           <p className="mt-2 text-sm leading-relaxed text-ink-500">
             {city.summary}
@@ -106,7 +106,7 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
       {!available ? (
         <div className="rounded-2xl border border-sand-200 bg-white p-6 text-center">
           <p className="text-sm text-ink-500">
-            {city.name} iÃÂÃÂ§in henÃÂÃÂ¼z veri toplanmadÃÂÃÂ±.
+            {city.name} iÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â§in henÃƒÂƒÃ‚ÂƒÃƒÂ‚Ã‚Â¼z veri toplanmadÃƒÂƒÃ‚Â„ÃƒÂ‚Ã‚Â±.
           </p>
         </div>
       ) : (
@@ -148,7 +148,7 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
             href={`/sehir/${city.slug}/gun-gun`}
             className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-sand-300 bg-white px-4 py-2 text-sm font-medium text-ink-700 shadow-sm transition hover:bg-sand-100"
           >
-            TÃÂ¼m yerleri gÃÂ¼n gÃÂ¼n sÃÂ½rala
+            Tüm yerleri gün gün sýrala
           </Link>
           <PlanForm city={city} themeCounts={counts} />
 
@@ -182,4 +182,5 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
     </main>
   );
 }
+
 
