@@ -8,7 +8,7 @@
     "lon": 35.3213,
     "summary": "Adana, Türkiye'nin Adana ilinin merkezi olan şehridir. Seyhan, Yüreğir, Çukurova ve Sarıçam olmak üzere 4 ilçeye bölünür. Türkiye'deki yedinci büyük metropolitan alan olup, ülkenin önde gelen tarım, ticaret ve kültür merkezlerinden biridir. Türkiye'deki maden zengini 4. bölge olan Adana; krom, demir, manganez, kurşun ve çinko yatakları açısından önem taşımaktadır.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/Varda_Demiryolu_Koprusu.jpg/960px-Varda_Demiryolu_Koprusu.jpg",
-                      "highlight":  "Varda Demiryolu Köprüsü",
+    "highlight": "Varda Demiryolu Köprüsü",
     "poiCount": 127,
     "districts": [
       "Seyhan",
@@ -40,7 +40,7 @@
     "lon": 38.2786,
     "summary": "Adıyaman, Türkiye'nin aynı adlı Adıyaman ilinin merkezi olan şehirdir. Kuzeyden Çelikhan, doğudan Kâhta, güneydoğudan Samsat ve Atatürk Baraj Gölü ile, güneyden Fırat Nehri ve batıdan Besni ve Tut ilçeleri ile çevrilidir. Önceleri şehir merkezindeki kale etrafında konumlanan yerleşim, il merkezi olduğu 1954 yılından itibaren genişlemiş ve büyümüştür.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/AdiyamanUhrturm.jpg/960px-AdiyamanUhrturm.jpg",
-                      "highlight":  "Adıyaman Saat Kulesi",
+    "highlight": "Adıyaman Saat Kulesi",
     "poiCount": 58,
     "districts": [
       "Ulucami Mahallesi",
@@ -66,7 +66,7 @@
     "lon": 30.5403,
     "summary": "Afyonkarahisar veya eski ve halk arasındaki ismiyle Afyon, Türkiye'nin Afyonkarahisar ilinin merkezi olan şehirdir. Mermercilik, termal turizmi ve gastronomi sektörlerinde Türkiye içinde ve uluslararası alanda isim yapmıştır. Şehrin Afyon olan ismi, 2005 yılında Afyonkarahisar olarak değiştirilmiştir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Burgberg_Afyonkarahisar_02.jpg/960px-Burgberg_Afyonkarahisar_02.jpg",
-                      "highlight":  "Afyonkarahisar Kalesi",
+    "highlight": "Afyonkarahisar Kalesi",
     "poiCount": 125,
     "districts": [
       "Akmescit",
@@ -100,7 +100,7 @@
     "lon": 43.0503,
     "summary": "Ağrı, Türkiye'nin Doğu Anadolu Bölgesinde bulunan Ağrı ilinin merkezi olan şehir. Ayrıca tarihte birden fazla isim değişikliği yaşamıştır. Karakilise, Ararat, Karaköse ve son olarak Ağrı Dağından esinlenilerek Ağrı ismi verilmiştir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/00_3411_%C4%B0shak_Pa%C5%9Fa_Saray%C4%B1_-_Turkey.jpg/960px-00_3411_%C4%B0shak_Pa%C5%9Fa_Saray%C4%B1_-_Turkey.jpg",
-    "highlight": "Karakilise Muharebesi",
+    "highlight": "İshak Paşa Sarayı",
     "poiCount": 16,
     "districts": [
       "Abide",
@@ -122,7 +122,7 @@
     "lon": 34.037,
     "summary": "Aksaray, Aksaray ilinin merkezi olan şehirdir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/I_Love_Aksaray_-_Aksaray_Meydan%C4%B1.jpg/960px-I_Love_Aksaray_-_Aksaray_Meydan%C4%B1.jpg",
-    "highlight": "Eğri Minare",
+    "highlight": "Aksaray Saat Kulesi",
     "poiCount": 110,
     "districts": [
       "Hacıhasanlı Mahallesi",
@@ -214,7 +214,7 @@
     "lon": 30.7133,
     "summary": "Antalya, Türkiye'nin Antalya ilinin merkezi olan şehirdir. Türkiye'de \"turizmin başkenti\" olarak görülür. Özellikle yaz aylarında Antalya'yı ziyaret eden turist sayısı artar.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Falezlerden_Antalya_Konyaalt%C4%B1_Plaj%C4%B1na_do%C4%9Fru_bir_g%C3%B6r%C3%BCn%C3%BCm.jpg/960px-Falezlerden_Antalya_Konyaalt%C4%B1_Plaj%C4%B1na_do%C4%9Fru_bir_g%C3%B6r%C3%BCn%C3%BCm.jpg",
-    "highlight": "Perga",
+    "highlight": "Konyaaltı Plajı",
     "poiCount": 150,
     "districts": [
       "Aksu",
@@ -287,7 +287,7 @@
     "lon": 27.8416,
     "summary": "Aydın, Türkiye'nin Aydın ilinin merkezi olan şehirdir. Ege Bölgesi'nde yer alan ve turizm ile tarım açısından en gelişmiş illerdendir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e6/MonumentAyd%C4%B1n_%283%29.JPG/960px-MonumentAyd%C4%B1n_%283%29.JPG",
-    "highlight": "Tralleis Antik Kenti",
+    "highlight": "Aydın Anıtı",
     "poiCount": 131,
     "districts": [
       "Efeler",
@@ -679,8 +679,8 @@
     "lon": 29.0864,
     "summary": "Denizli, Türkiye'nin Ege Bölgesi'ndeki aynı adlı Denizli ilinin merkezi olan bir şehirdir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Pamukkale_Traventines%2C_Turkey.jpg/960px-Pamukkale_Traventines%2C_Turkey.jpg",
-                      "highlight":  "Pamukkale Travertenleri",
-                      "poiCount":  150,
+    "highlight": "Pamukkale Travertenleri",
+    "poiCount": 150,
     "districts": [
       "Pamukkale",
       "Saraylar Mahallesi",
@@ -871,8 +871,8 @@
     "lon": 41.2679,
     "summary": "Erzurum, Türkiye'nin Erzurum ilinin merkezi olan şehirdir. Bir bölümü Türkiye'nin Doğu Anadolu Bölgesi'nde yer alırken diğer bölümü ise Türkiye'nin Doğu Karadeniz Bölgesi'nde yer almaktadır. Erzurum Ovası'nın güneydoğu kenarında, bu ova ile Palandöken Dağı'nın temas sahasında kurulmuş olan Erzurum, tarihin ilk dönemlerinden beri yerleşim yeri olarak kullanılmakta olup tarihî eserleri ve kış sporları tesisleriyle tanınır.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/Erzurum_Citadel_-_Erzurum_Kalesi_01.jpg/960px-Erzurum_Citadel_-_Erzurum_Kalesi_01.jpg",
-                      "highlight":  "Erzurum Kalesi",
-                      "poiCount":  150,
+    "highlight": "Erzurum Kalesi",
+    "poiCount": 150,
     "districts": [
       "Muratpaşa Mahallesi",
       "Palandöken",
@@ -1311,8 +1311,8 @@
     "lon": 33.7827,
     "summary": "Kastamonu, Türkiye Cumhuriyeti'nin Karadeniz Bölgesi'nde yer alan Kastamonu ilinin merkezi olan şehirdir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Kaleden_Cumhuriyet_Meydan%C4%B1_ve_%C3%87evresi.JPG/960px-Kaleden_Cumhuriyet_Meydan%C4%B1_ve_%C3%87evresi.JPG",
-                      "highlight":  "Kastamonu Kalesi",
-                      "poiCount":  101,
+    "highlight": "Kastamonu Kalesi",
+    "poiCount": 101,
     "districts": [
       "Hepkebirler",
       "Merkez",
@@ -1478,8 +1478,8 @@
     "lon": 29.9408,
     "summary": "Kocaeli, Türkiye'nin bir ilidir. Türkiye'nin Marmara Bölgesi'nde yer alır. Türkiye'nin en kalabalık 10. şehridir. İl, ülkenin en önemli sanayi ve ticaret kentlerinden biridir. Kocaeli; SEGE-2017 sıralamasına göre İstanbul, Ankara ve İzmir'den sonra en gelişmiş şehirdir. 2024 sonu itibarıyla 2.130.006 kişilik nüfusa sahiptir. Nüfus bakımından İstanbul ve Bursa'dan sonra Marmara Bölgesi'nin üçüncü büyük ilidir. Adını 1320 yılında İzmit yöresini fetheden Akça Koca'dan almaktadır. İstanbul, Bursa, Sakarya ve Yalova illeriyle komşudur. Kocaeli'nin deniz seviyesinden yüksekliği yaklaşık 4 metredir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Eskihisarkale3k.jpg/960px-Eskihisarkale3k.jpg",
-                      "highlight":  "Eski Hisar Kalesi",
-                      "poiCount":  150,
+    "highlight": "Eski Hisar Kalesi",
+    "poiCount": 150,
     "districts": [
       "İzmit",
       "Kavaklı Mahallesi",
@@ -1808,8 +1808,8 @@
     "lon": 37.8764,
     "summary": "Ordu şu anlamlara gelebilir:Ordu (il), Türkiye'nin Karadeniz Bölgesi'ndeki bir ili.\nOrdu (şehir), Ordu ilinin merkezi olan şehir.\nAltınordu, Ordu şehri ve çevre mahallelerinden oluşan ilçe.\nOrdu (askeriye), bir devletin silâhlı kuvvetlerine verilen isim.\nOrduspor, Türkiye'de bir futbol takımı.\n52 Orduspor, Türkiye'de bir futbol takımı.\nOrduspor 1967, Türkiye'de bir futbol takımı.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/Ordu%2C_Turkey.JPG/960px-Ordu%2C_Turkey.JPG",
-                      "highlight":  "Ordu Şehir Manzarası",
-                      "poiCount":  89,
+    "highlight": "Ordu Şehir Manzarası",
+    "poiCount": 89,
     "districts": [
       "Taşbaşı Mahallesi",
       "Selimiye Mahallesi",
@@ -2170,8 +2170,8 @@
     "lon": 39.7168,
     "summary": "Trabzon, Türkiye'nin Trabzon ilinin merkezi olan şehirdir. Karadeniz Bölgesi'nin Doğu Karadeniz Bölümü'nde yer alan ilin Karadeniz'e kıyısı bulunur. Günümüzde Karadeniz Bölgesi'nin Samsun'dan sonra ikinci büyük kentidir. 12 Kasım 2012 tarihinde kabul edilen büyükşehir yasa tasarısı ile büyükşehir belediyesi olmuş ve merkez ilçe kaldırılarak Ortahisar ilçesi kurulmuştur. İstiklal madalyası alan şehirlerden biridir. Trabzon iki il ile birlikte de \"şehzadeler şehri\" olarak anılır. Evliya Çelebi Trabzon için şöyle demiş: \"Bu şehre küçük İstanbul denilse yeridir. İrem bağları gibi süslü bir şehirdir burası.'' Fatih Sultan Mehmed ise Trabzon'u kuşattığı vakit şöyle söylemiştir: ''Trabzon fethedilmeden İstanbul fethedilmiş sayılmaz.''",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Trabzon_Kalesi.jpeg/960px-Trabzon_Kalesi.jpeg",
-                      "highlight":  "Trabzon Kalesi",
-                      "poiCount":  139,
+    "highlight": "Trabzon Kalesi",
+    "poiCount": 139,
     "districts": [
       "Kemerkaya Mahallesi",
       "Çarşı Mahallesi",
@@ -2228,7 +2228,7 @@
     "lon": 29.4082,
     "summary": "Uşak, Ege Bölgesi üzerinde yer alan Uşak ilinin merkezi olan şehirdir. Uşak ilinin deniz seviyesinden yüksekliği 920 metredir. Uşak merkez ilçesinin yüzölçümü 1.655 km²dir.",
     "photo": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/U%C5%9Fak_Kurtulu%C5%9F_An%C4%B1t%C4%B1_ve_Atat%C3%BCrk_Heykeli.jpg/960px-U%C5%9Fak_Kurtulu%C5%9F_An%C4%B1t%C4%B1_ve_Atat%C3%BCrk_Heykeli.jpg",
-                      "highlight":  "Uşak Kurtuluş Anıtı",
+    "highlight": "Uşak Kurtuluş Anıtı",
     "poiCount": 117,
     "districts": [
       "Kurtuluş Mahallesi",
