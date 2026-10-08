@@ -588,11 +588,16 @@ async function cityCard(city) {
   });
 }
 
-/** Wikipedia returns giant originals plus tracking params; make it a sane 1024px thumbnail. */
+/**
+ * Wikipedia returns giant originals plus tracking params; make it a sane
+ * thumbnail. Wikimedia only serves a fixed set of common widths now (120, 250,
+ * 500, 960, 1280, 1920) and answers anything else with HTTP 400, so 960px is
+ * used instead of an arbitrary value like 1024px.
+ */
 function resizeWikimedia(url) {
   if (!url) return null;
   const clean = url.split("?")[0];
-  return clean.replace(/\/\d+px-/, "/1024px-");
+  return clean.replace(/\/\d+px-/, "/960px-");
 }
 
 // Nominatim only tells us the broad category, so the name is the tie breaker:

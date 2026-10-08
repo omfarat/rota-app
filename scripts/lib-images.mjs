@@ -223,7 +223,7 @@ async function wikidataEntities(ids, seen) {
  * Resolves Commons file names to image URLs, 40 titles per request.
  *
  * The API answers a width request with a rendition it already has, and with the
- * untouched original when it does not - so `iiurlwidth=640` can hand back a
+ * untouched original when it does not - so a width request can hand back a
  * 900x1600, 1.5MB file. Anything wider than asked for is requested again at a
  * smaller width until it comes back as a real thumbnail.
  *
@@ -240,7 +240,9 @@ export async function commonsThumbs(filenames) {
   // echoes back - otherwise half the lookups miss on a spelling difference.
   const norm = (s) => s.replace(/_/g, " ");
 
-  for (const width of [640, 400, 320]) {
+  // Wikimedia serves only a fixed set of common widths (120, 250, 500, 960,
+  // 1280, 1920) and returns HTTP 400 for anything else, so ask for those.
+  for (const width of [960, 500, 250]) {
     if (!pending.length) break;
     const next = [];
     const last = width === 320;

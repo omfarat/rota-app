@@ -25,7 +25,15 @@ const CACHE = ".cache/vimg.json";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const pois = JSON.parse(readFileSync("src/data/pois.json", "utf8"));
-const wanted = [...new Set(Object.values(pois).flat().map((p) => p.image).filter(Boolean))];
+const cities = JSON.parse(readFileSync("src/data/cities.json", "utf8"));
+// City card photos live in cities.json, not pois.json; checking only the latter
+// is how a dead thumbnail on every city card once went unnoticed.
+const wanted = [
+  ...new Set([
+    ...Object.values(pois).flat().map((p) => p.image),
+    ...cities.map((c) => c.photo),
+  ].filter(Boolean)),
+];
 const urls = wanted.slice(0, limit);
 
 mkdirSync(".cache", { recursive: true });
