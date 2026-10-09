@@ -68,7 +68,7 @@ export default async function ItineraryPage(
             rel='noreferrer'
             className='inline-flex items-center gap-1.5 rounded-full bg-terra-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-terra-700'
           >
-            Tüm rotayý Google Haritalar'da aç
+            Tüm rotayı Google Haritalar'da aç
           </a>
         )}
       </div>
@@ -82,7 +82,7 @@ export default async function ItineraryPage(
               <div>
                 <h2 className='text-base font-bold text-ink-900'>Gün {day.day}</h2>
                 <p className='mt-0.5 text-xs text-ink-500 sm:text-sm'>
-                  {day.stops.length} durak · {day.distanceKm.toFixed(1)} km · {day.travelMin} dk yürüyüþ · {day.visitMin} dk yerinde
+                  {day.stops.length} durak · {day.distanceKm.toFixed(1)} km · {day.travelMin} dk araçla · {day.visitMin} dk yerinde
                 </p>
               </div>
               {mapLink(di) && (

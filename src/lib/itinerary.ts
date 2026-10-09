@@ -28,6 +28,10 @@ export type CityItinerary = {
 
 const DAY_TARGET_MIN = 540;
 
+function driveMin(km: number) {
+  return Math.round((km / 40) * 60);
+}
+
 function walkMin(km: number) {
   return Math.round((km / 4) * 60);
 }
@@ -58,7 +62,7 @@ function buildDay(
 
   const stops: ItineraryStop[] = ordered.map((p, i) => {
     const d = haversineKm({lat:prevLat,lon:prevLon}, {lat:p.lat,lon:p.lon});
-    const t = walkMin(d);
+    const t = driveMin(d);
     distanceKm += d;
     travelMin += t;
     visitMin += p.duration;
