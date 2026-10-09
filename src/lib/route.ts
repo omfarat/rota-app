@@ -146,13 +146,13 @@ export function planRoute(input: PlanInput): RoutePlan {
   if (nearby.length >= 3) {
     if (nearby.length < pool.length) {
       notes.push(
-        `Başlangıç noktasına ${reachKm.toFixed(0)} km'den uzak duraklar alınmadı.`,
+        `Başlangıç noktasına ... uzak duraklar alınmadıı.`,
       );
     }
     pool = nearby;
   } else {
     notes.push(
-      "Başlangıç noktasına yakın yeterli durak yok; en yakın olanlar kullanıldı.",
+      "Başlangıç noktasına yakın yeterli durak yok; en yakın olanlar kullanıldııldı.",
     );
   }
 
