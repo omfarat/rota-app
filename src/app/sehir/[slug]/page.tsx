@@ -144,12 +144,6 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
             </section>
           )}
 
-                    <Link
-            href={`/sehir/${city.slug}/gun-gun`}
-            className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-sand-300 bg-white px-4 py-2 text-sm font-medium text-ink-700 shadow-sm transition hover:bg-sand-100"
-          >
-            Tüm yerleri gün gün sırala
-          </Link>
           <PlanForm city={city} themeCounts={counts} />
 
           <section className="mt-10">
