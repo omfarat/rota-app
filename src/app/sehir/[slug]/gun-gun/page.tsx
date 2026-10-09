@@ -19,29 +19,34 @@ export default async function ItineraryPage(
   if (!city) notFound();
   const itin = buildItinerary(slug);
 
+  function directionsUrl(stops: { lat: number; lon: number }[]) {
+    if (stops.length < 2) return '';
+    const first = stops[0];
+    const last = stops[stops.length - 1];
+    const middles = stops.slice(1, -1);
+    if (middles.length <= 9) {
+      const waypoints = middles.map((s) => s.lat + ',' + s.lon).join('|');
+      return (
+        'https://www.google.com/maps/dir/?api=1' +
+        '&origin=' + first.lat + ',' + first.lon +
+        '&destination=' + last.lat + ',' + last.lon +
+        (waypoints ? '&waypoints=' + encodeURIComponent(waypoints) : '') +
+        '&travelmode=driving'
+      );
+    }
+    const path = stops.map((s) => s.lat + ',' + s.lon).join('/');
+    return 'https://www.google.com/maps/dir/' + path + '?travelmode=driving';
+  }
+
   function mapLink(dayIndex: number) {
     const d = itin.days[dayIndex];
-    if (!d || d.stops.length === 0) return '';
-    const first = d.stops[0];
-    const last = d.stops[d.stops.length - 1];
-    const waypoints = d.stops
-      .slice(1, -1)
-      .map((s) => s.lat + "," + s.lon)
-      .join('|');
-    return 'https://maps.google.com/?saddr='+first.lat+','+first.lon+'&daddr='+last.lat+','+last.lon+(waypoints ? '&waypoints='+waypoints : '')+'&dirflg=w';
+    if (!d) return '';
+    return directionsUrl(d.stops);
   }
 
   function allMapLink() {
-    if (itin.days.length === 0) return '';
     const all = itin.days.flatMap((d) => d.stops);
-    if (all.length === 0) return '';
-    const first = all[0];
-    const last = all[all.length - 1];
-    const waypoints = all
-      .slice(1, -1)
-      .map((s) => s.lat + "," + s.lon)
-      .join('|');
-    return 'https://maps.google.com/?saddr='+first.lat+','+first.lon+'&daddr='+last.lat+','+last.lon+(waypoints ? '&waypoints='+waypoints : '')+'&dirflg=w';
+    return directionsUrl(all);
   }
 
   return (
@@ -50,12 +55,12 @@ export default async function ItineraryPage(
         href={`/sehir/${city.slug}`}
         className='mb-4 inline-flex items-center gap-1.5 text-sm text-ink-500 transition hover:text-terra-600'
       >
-         {city.name}
+        ← {city.name}
       </Link>
       <div className='mb-6 flex flex-wrap items-end justify-between gap-3'>
         <div>
           <h1 className='text-2xl font-bold text-ink-900 sm:text-3xl'>
-            {city.name}  gün gün rota
+            {city.name} · gün gün rota
           </h1>
           <p className='mt-1 text-sm text-ink-500'>
             {itin.totalPois} yer · {itin.totalDays} gün
