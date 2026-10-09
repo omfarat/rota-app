@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import type { Theme } from "@/lib/types";
 import { THEMES } from "@/lib/types";
 import type { RoutePlan, RouteStop } from "@/lib/route";
-import { formatDuration, haversineKm, reorder } from "@/lib/route";
+import { formatDuration, haversineKm, reorder, travelMinutes } from "@/lib/route";
 import { googleMapsUrl, appleMapsUrl, osmUrl } from "@/lib/maps";
 import type { Weather } from "@/lib/weather";
 
@@ -32,10 +32,10 @@ export function RouteView({
         i === 0 ? startPoint : { lat: stops[i - 1].lat, lon: stops[i - 1].lon };
       return acc + haversineKm(prev, s);
     }, 0);
-    const walk = Math.round((km / 4.6) * 60);
+    const drive = travelMinutes(km);
     return {
       km: +km.toFixed(1),
-      walk,
+      drive,
       visit: stops.reduce((a, s) => a + s.duration, 0),
       indoor: stops.length
         ? Math.round((stops.filter((s) => s.indoor).length / stops.length) * 100)
@@ -93,7 +93,7 @@ export function RouteView({
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         <Stat label="Durak" value={String(stops.length)} />
         <Stat label="Mesafe" value={`${stats.km} km`} />
-        <Stat label="Yürüyüş" value={formatDuration(stats.walk)} />
+        <Stat label="Araçla" value={formatDuration(stats.drive)} />
         <Stat label="Yerinde" value={formatDuration(stats.visit)} />
       </section>
 
@@ -213,8 +213,8 @@ export function RouteView({
                       </a>
                       {i > 0 && (
                         <span className="text-[11px] text-ink-400">
-                          ↑ {stop.distanceFromPrevKm} km · {stop.walkMinutes} dk
-                          yürüyüş
+                          ↑ {stop.distanceFromPrevKm} km · {stop.driveMinutes} dk
+                          araçla
                         </span>
                       )}
                     </div>
@@ -275,7 +275,7 @@ export function RouteView({
         <p className="text-center text-xs leading-relaxed text-ink-400">
           {points.length > 10
             ? `Uzun rotalar harita uygulamasında bölünebilir. İlk 10 durak tek listede açılır, kalanı için aynı butonu tekrar kullan.`
-            : "Haritada yürüyüş modu seçili gelir."}
+            : "Haritada araç (sürüş) modu seçili gelir."}
         </p>
       </section>
 

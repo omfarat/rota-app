@@ -1,7 +1,7 @@
 import { getCity } from "@/lib/data";
 import { getPois } from "@/lib/pois";
 import type { Poi } from "@/lib/types";
-import { haversineKm, reorder } from "@/lib/route";
+import { haversineKm, reorder, travelMinutes } from "@/lib/route";
 
 export type ItineraryStop = Poi & {
   day: number;
@@ -27,14 +27,6 @@ export type CityItinerary = {
 };
 
 const DAY_TARGET_MIN = 540;
-
-function driveMin(km: number) {
-  return Math.round((km / 40) * 60);
-}
-
-function walkMin(km: number) {
-  return Math.round((km / 4) * 60);
-}
 
 function buildDay(
   dayNum: number,
@@ -62,7 +54,7 @@ function buildDay(
 
   const stops: ItineraryStop[] = ordered.map((p, i) => {
     const d = haversineKm({lat:prevLat,lon:prevLon}, {lat:p.lat,lon:p.lon});
-    const t = driveMin(d);
+    const t = travelMinutes(d);
     distanceKm += d;
     travelMin += t;
     visitMin += p.duration;

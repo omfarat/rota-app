@@ -167,7 +167,7 @@ export function PlanForm({
       </button>
 
       <p className="text-center text-xs text-ink-400">
-        En fazla {chosen.maxStops} durak · {chosen.detail.split("·")[1].trim()} yürüyüş
+        En fazla {chosen.maxStops} durak · {chosen.detail.split("·")[1].trim()} araçla
       </p>
     </div>
   );

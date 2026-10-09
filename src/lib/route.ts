@@ -8,7 +8,7 @@ export interface LatLon {
 export interface RouteStop extends Poi {
   index: number;
   distanceFromPrevKm: number;
-  walkMinutes: number;
+  driveMinutes: number;
 }
 
 export interface RoutePlan {
@@ -16,7 +16,7 @@ export interface RoutePlan {
   theme: Theme;
   stops: RouteStop[];
   totalKm: number;
-  totalWalkMinutes: number;
+  totalDriveMinutes: number;
   totalMinutes: number;
   indoorRatio: number;
   weatherApplied: boolean;
@@ -24,7 +24,14 @@ export interface RoutePlan {
 }
 
 const R_KM = 6371;
-const WALK_KMH = 4.6;
+
+/** City driving averages well below the open-road limit with traffic and lights. */
+const DRIVE_KMH = 40;
+
+/** Estimated car travel time over a straight-line distance, in minutes. */
+export function travelMinutes(km: number): number {
+  return Math.round((km / DRIVE_KMH) * 60);
+}
 
 export function haversineKm(a: LatLon, b: LatLon): number {
   const dLat = ((b.lat - a.lat) * Math.PI) / 180;
@@ -139,7 +146,7 @@ export function planRoute(input: PlanInput): RoutePlan {
     }
   }
 
-  // Keep the walk local: a start 20 km from the centre must not drag the
+  // Keep the drive local: a start 20 km from the centre must not drag the
   // route out to the edge of the province just because a stop ranks well.
   const reachKm = Math.max(maxKm * 1.8, 6);
   const nearby = pool.filter((p) => haversineKm(start, p) <= reachKm);
@@ -171,7 +178,7 @@ export function planRoute(input: PlanInput): RoutePlan {
       theme,
       stops: [],
       totalKm: 0,
-      totalWalkMinutes: 0,
+      totalDriveMinutes: 0,
       totalMinutes: 0,
       indoorRatio: 0,
       weatherApplied: wet,
@@ -199,12 +206,12 @@ export function planRoute(input: PlanInput): RoutePlan {
     }
   }
 
-  // Trim until the walk fits both the distance budget and the time budget.
+  // Trim until the drive fits both the distance budget and the time budget.
   // The floor is one stop, not three: a "3 hour" request that quietly returns
   // three 90 minute museums is a 5 hour trip, which is not what was asked for.
-  const spent = (list: number[], walkKm: number) =>
+  const spent = (list: number[], driveKm: number) =>
     list.reduce((acc, i) => acc + pool[i].duration, 0) +
-    Math.round((walkKm / WALK_KMH) * 60);
+    travelMinutes(driveKm);
 
   let minutes = spent(selected, km);
   const beforeTrim = selected.length;
@@ -217,7 +224,7 @@ export function planRoute(input: PlanInput): RoutePlan {
     list.forEach((idx, i) => {
       const prev = i === 0 ? start : pool[list[i - 1]];
       const cost =
-        pool[idx].duration + (haversineKm(prev, pool[idx]) / WALK_KMH) * 60;
+        pool[idx].duration + travelMinutes(haversineKm(prev, pool[idx]));
       if (cost > worstCost) {
         worstCost = cost;
         worst = i;
@@ -243,7 +250,7 @@ export function planRoute(input: PlanInput): RoutePlan {
     );
   }
 
-  // A stop an hour's walk away does not fit a three hour request, so it goes.
+  // A stop an hour's drive away does not fit a three hour request, so it goes.
 // Distance is treated differently: sights in a big city really are spread out,
 // and dropping the only museum eight kilometres away helps nobody.
   if (selected.length === 1 && minutes > hours * 60) {
@@ -272,11 +279,11 @@ export function planRoute(input: PlanInput): RoutePlan {
       ...poi,
       index: i + 1,
       distanceFromPrevKm: +d.toFixed(2),
-      walkMinutes: Math.max(1, Math.round((d / WALK_KMH) * 60)),
+      driveMinutes: Math.max(1, travelMinutes(d)),
     };
   });
 
-  const totalWalkMinutes = Math.round((km / WALK_KMH) * 60);
+  const totalDriveMinutes = travelMinutes(km);
   const indoorCount = stops.filter((s) => s.indoor).length;
 
   return {
@@ -284,9 +291,9 @@ export function planRoute(input: PlanInput): RoutePlan {
     theme,
     stops,
     totalKm: +km.toFixed(1),
-    totalWalkMinutes,
+    totalDriveMinutes,
     totalMinutes:
-      stops.reduce((a, s) => a + s.duration, 0) + totalWalkMinutes,
+      stops.reduce((a, s) => a + s.duration, 0) + totalDriveMinutes,
     indoorRatio: stops.length ? indoorCount / stops.length : 0,
     weatherApplied: wet,
     notes,
@@ -310,7 +317,7 @@ export function reorder(
       ...s,
       index: i + 1,
       distanceFromPrevKm: +d.toFixed(2),
-      walkMinutes: Math.max(1, Math.round((d / WALK_KMH) * 60)),
+      driveMinutes: Math.max(1, travelMinutes(d)),
     };
   });
   const km =
@@ -318,13 +325,13 @@ export function reorder(
       const prev = i === 0 ? origin : stops[i - 1];
       return acc + haversineKm(prev, s);
     }, 0) * 0.94; // path is not a straight line
-  const walk = Math.round((km / WALK_KMH) * 60);
+  const drive = travelMinutes(km);
   return {
     ...plan,
     stops,
     totalKm: +km.toFixed(1),
-    totalWalkMinutes: walk,
-    totalMinutes: stops.reduce((a, s) => a + s.duration, 0) + walk,
+    totalDriveMinutes: drive,
+    totalMinutes: stops.reduce((a, s) => a + s.duration, 0) + drive,
   };
 }
 

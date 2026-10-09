@@ -23,7 +23,7 @@ export default function HomePage() {
         </h1>
         <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-500">
           {cities.length} ildeki gezilecek yerler hazır. Tema seç, konumunu ver,
-          uygulama en kısa yürüyüş rotasını sıralasın.
+          uygulama en kısa araç rotasını sıralasın.
         </p>
       </header>
 

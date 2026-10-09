@@ -21,7 +21,7 @@ export async function generateMetadata(
   const title = `${city.name} gezilecek yerler ve rota`;
   const description =
     city.summary?.slice(0, 160) ??
-    `${city.name}'da gezilecek ${city.poiCount} yer arasından seç, en kısa yürüyüş rotasını oluştur.`;
+    `${city.name}'da gezilecek ${city.poiCount} yer arasından seç, en kısa araç rotasını oluştur.`;
 
   return {
     title,

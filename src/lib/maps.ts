@@ -28,7 +28,7 @@ export function googleMapsUrl(origin: LatLon, stops: LatLon[]): string {
     api: "1",
     origin: coord(origin),
     destination: coord(stops[stops.length - 1]),
-    travelmode: "walking",
+    travelmode: "driving",
   });
   // Intermediate stops only: the last one is already the destination.
   const waypoints = stops.slice(0, -1).map(coord).join("|");
@@ -40,7 +40,7 @@ export function appleMapsUrl(origin: LatLon, stops: LatLon[]): string {
   if (!stops.length) return `https://maps.apple.com/?saddr=${coord(origin)}`;
   const src = encodeURIComponent(coord(origin));
   const dest = encodeURIComponent(coord(stops[stops.length - 1]));
-  return `https://maps.apple.com/?saddr=${src}&daddr=${dest}&dirflg=w`;
+  return `https://maps.apple.com/?saddr=${src}&daddr=${dest}&dirflg=d`;
 }
 
 export function googleSinglePlaceUrl(name: string): string {

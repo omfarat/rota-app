@@ -56,7 +56,7 @@ test("a plan never repeats a stop and numbers them in order", () => {
   }
 });
 
-test("totalKm equals the sum of the legs actually walked", () => {
+test("totalKm equals the sum of the legs actually driven", () => {
   const p = plan();
   const start = { lat: city.lat, lon: city.lon };
   let walked = 0;
@@ -75,7 +75,7 @@ test("stop count stays within the requested maximum", () => {
   }
 });
 
-test("stopped time plus walking fits the requested hours", () => {
+test("stopped time plus driving fits the requested hours", () => {
   for (const d of DURATIONS) {
     const p = plan({ hours: d.hours, maxKm: d.maxKm, maxStops: d.maxStops });
     assert.ok(p.totalMinutes <= d.hours * 60, `${d.id}: ${p.totalMinutes} dk > ${d.hours} saat`);
@@ -124,7 +124,7 @@ test("an empty city does not crash the planner", () => {
   assert.equal(p.totalKm, 0);
 });
 
-test("a start far from the centre keeps the walk local", () => {
+test("a start far from the centre keeps the drive local", () => {
   const near = plan();
   const far = plan({ start: { lat: 39.9334, lon: 32.8597 } }); // Ankara centre
   assert.ok(far.totalKm <= near.totalKm * 4, `uzak başlangıç çok uzattı: ${far.totalKm}`);

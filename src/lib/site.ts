@@ -8,4 +8,4 @@ export const SITE_URL = (
 export const SITE_NAME = "Rota";
 
 export const SITE_DESCRIPTION =
-  "Türkiye'nin 81 ilinde gezilecek yerleri keşfet, seçtiğin yerlerden en kısa yürüyüş rotasını oluştur. Çevrimdışı çalışır.";
+  "Türkiye'nin 81 ilinde gezilecek yerleri keşfet, seçtiğin yerlerden en kısa araç rotasını oluştur. Çevrimdışı çalışır.";
