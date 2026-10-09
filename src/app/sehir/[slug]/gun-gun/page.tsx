@@ -44,11 +44,6 @@ export default async function ItineraryPage(
     return directionsUrl(d.stops);
   }
 
-  function allMapLink() {
-    const all = itin.days.flatMap((d) => d.stops);
-    return directionsUrl(all);
-  }
-
   return (
     <main className='mx-auto max-w-3xl px-4 pb-24 pt-6 sm:px-6'>
       <Link
@@ -66,16 +61,6 @@ export default async function ItineraryPage(
             {itin.totalPois} yer · {itin.totalDays} gün
           </p>
         </div>
-        {allMapLink() && (
-          <a
-            href={allMapLink()}
-            target='_blank'
-            rel='noreferrer'
-            className='inline-flex items-center gap-1.5 rounded-full bg-terra-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-terra-700'
-          >
-            Tüm rotayı Google Haritalar'da aç
-          </a>
-        )}
       </div>
       <div className='space-y-6'>
         {itin.days.map((day, di) => (
