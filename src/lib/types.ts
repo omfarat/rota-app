@@ -47,9 +47,9 @@ export const THEMES: {
 // Single source of truth for trip length: the form, the route page and the
 // router all read these numbers, so they cannot drift apart.
 export const DURATIONS = [
-  { id: "short", label: "Kısa", detail: "3 saat · 4 km", hours: 3, maxKm: 4, maxStops: 5 },
-  { id: "half", label: "Yarım gün", detail: "5 saat · 7 km", hours: 5, maxKm: 7, maxStops: 8 },
-  { id: "full", label: "Tam gün", detail: "9 saat · 14 km", hours: 9, maxKm: 14, maxStops: 12 },
+  { id: "short", label: "Kısa", detail: "3 saat · 15 km", hours: 3, maxKm: 15, maxStops: 5 },
+  { id: "half", label: "Yarım gün", detail: "5 saat · 25 km", hours: 5, maxKm: 25, maxStops: 8 },
+  { id: "full", label: "Tam gün", detail: "9 saat · 45 km", hours: 9, maxKm: 45, maxStops: 12 },
 ] as const;
 
 export type Duration = (typeof DURATIONS)[number];
