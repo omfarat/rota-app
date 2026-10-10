@@ -49,7 +49,7 @@ export default function HomePage() {
               {(groups.get(letter) ?? []).map((city) => (
                 <li key={city.slug}>
                   <Link
-                    href={`/sehir/${city.slug}`}
+                    href={`/sehir/${city.slug}/`}
                     className="group block overflow-hidden rounded-2xl border border-sand-200 bg-white transition hover:border-terra-500 hover:shadow-md"
                   >
                     <div className="relative aspect-[4/3] w-full overflow-hidden bg-sand-200">

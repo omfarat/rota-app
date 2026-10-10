@@ -76,7 +76,7 @@ export function RouteView({
       <div className="rounded-2xl border border-sand-200 bg-white p-8 text-center">
         <p className="font-medium">Bu seçimle uygun durak kalmadı.</p>
         <Link
-          href={`/sehir/${plan.city.slug}`}
+          href={`/sehir/${plan.city.slug}/`}
           className="mt-3 inline-block text-sm text-terra-600 hover:underline"
         >
           Seçimleri değiştir

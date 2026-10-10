@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { City, DurationId } from "@/lib/types";
@@ -36,7 +37,7 @@ export function PlanForm({
       params.set("lat", coords.lat.toFixed(5));
       params.set("lon", coords.lng.toFixed(5));
     }
-    router.push(`/sehir/${city.slug}/rota?${params.toString()}`);
+    router.push(`/sehir/${city.slug}/rota/?${params.toString()}`);
   }
 
   return (
@@ -103,12 +104,12 @@ export function PlanForm({
           ))}
         </div>
         <div className="mt-2">
-          <a
-            href={`/sehir/${city.slug}/gun-gun`}
+          <Link
+            href={`/sehir/${city.slug}/gun-gun/`}
             className="inline-flex items-center gap-1.5 rounded-full border border-sand-300 bg-white px-4 py-2 text-sm font-medium text-ink-700 shadow-sm transition hover:bg-sand-100"
           >
             Boşum, gün gün planla
-          </a>
+          </Link>
         </div>
       </section>
 

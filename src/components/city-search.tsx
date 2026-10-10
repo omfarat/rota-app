@@ -34,7 +34,7 @@ export function CitySearch({ cities }: { cities: City[] }) {
           {results.slice(0, 12).map((city) => (
             <li key={city.slug}>
               <a
-                href={`/sehir/${city.slug}`}
+                href={`/sehir/${city.slug}/`}
                 className="flex items-center justify-between gap-3 px-4 py-3 text-sm transition hover:bg-sand-50"
               >
                 <span className="font-medium">{city.name}</span>

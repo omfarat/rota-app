@@ -47,7 +47,7 @@ export default async function ItineraryPage(
   return (
     <main className='mx-auto max-w-3xl px-4 pb-24 pt-6 sm:px-6'>
       <Link
-        href={`/sehir/${city.slug}`}
+        href={`/sehir/${city.slug}/`}
         className='mb-4 inline-flex items-center gap-1.5 text-sm text-ink-500 transition hover:text-terra-600'
       >
         ← {city.name}
