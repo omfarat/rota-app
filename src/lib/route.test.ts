@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-import { planRoute, haversineKm } from "./route.ts";
+import { planRoute, planCustomRoute, CUSTOM_MAX_STOPS, haversineKm } from "./route.ts";
 import type { City, Poi, Theme } from "./types.ts";
 import { DURATIONS, durationOf, THEMES } from "./types.ts";
 
@@ -174,4 +174,35 @@ test("durationOf falls back to the default for unknown ids", () => {
   assert.equal(durationOf("days").id, "half");
   assert.equal(durationOf(undefined).id, "half");
   assert.equal(durationOf("nonsense").id, "half");
+});
+
+test("a custom route keeps every pick and numbers them in visit order", () => {
+  const picked = allPois[city.slug].slice(0, 5);
+  const p = planCustomRoute(city, picked, { lat: city.lat, lon: city.lon });
+  assert.equal(p.stops.length, picked.length);
+  assert.deepEqual(
+    new Set(p.stops.map((s) => s.id)),
+    new Set(picked.map((s) => s.id)),
+  );
+  p.stops.forEach((s, i) => assert.equal(s.index, i + 1));
+  const legs = p.stops.reduce((a, s) => a + s.distanceFromPrevKm, 0);
+  assert.ok(Math.abs(legs - p.totalKm) < 0.1, `bacak toplami ${legs}, toplam ${p.totalKm}`);
+  assert.ok(p.notes.some((n) => n.includes("Kendi seçiminle")));
+});
+
+test("a custom route never exceeds the stop cap", () => {
+  const base = allPois[city.slug].length >= CUSTOM_MAX_STOPS + 5
+    ? allPois[city.slug]
+    : allPois["mersin"];
+  const picked = base.slice(0, CUSTOM_MAX_STOPS + 5);
+  const p = planCustomRoute(city, picked, { lat: city.lat, lon: city.lon });
+  assert.equal(p.stops.length, CUSTOM_MAX_STOPS);
+  assert.ok(p.notes.some((n) => n.includes(`ilk ${CUSTOM_MAX_STOPS}`)));
+});
+
+test("a custom route with no picks explains itself", () => {
+  const p = planCustomRoute(city, [], { lat: city.lat, lon: city.lon });
+  assert.deepEqual(p.stops, []);
+  assert.equal(p.totalKm, 0);
+  assert.ok(p.notes.length > 0);
 });

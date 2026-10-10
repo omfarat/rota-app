@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getPois } from "@/lib/pois";
-import { THEMES, durationOf, type City, type Theme } from "@/lib/types";
-import { planRoute } from "@/lib/route";
+import { THEMES, durationOf, type City, type Poi, type Theme } from "@/lib/types";
+import { planCustomRoute, planRoute } from "@/lib/route";
 import { fetchWeather, type Weather } from "@/lib/weather";
 import { RouteView } from "@/components/route-view";
 
@@ -34,6 +34,27 @@ export function RoutePlanner({ city }: { city: City }) {
   const startLabel = useHere ? "Konumun" : `${city.name} merkezi`;
 
   const pois = useMemo(() => getPois(city.slug), [city.slug]);
+  const byId = useMemo(() => new Map(pois.map((p) => [p.id, p])), [pois]);
+
+  // "Kendi rotanı oluştur" akışı: sec sayfası virgülle ayrılmış POI id'leri
+  // yollar. Bilinmeyen ya da tekrarlı id'ler elenir; sıra optimizasyonu
+  // planCustomRoute içinde yapılır.
+  const customIds = useMemo(() => {
+    const raw = search.get("ozel");
+    if (raw === null) return null;
+    return [...new Set(raw.split(",").map((s) => s.trim()).filter(Boolean))];
+  }, [search]);
+
+  const customPicks = useMemo<Poi[] | null>(
+    () =>
+      customIds === null
+        ? null
+        : customIds.flatMap((id) => {
+            const p = byId.get(id);
+            return p ? [p] : [];
+          }),
+    [customIds, byId],
+  );
 
   useEffect(() => {
     let alive = true;
@@ -45,17 +66,20 @@ export function RoutePlanner({ city }: { city: City }) {
     };
   }, [city.lat, city.lon]);
 
-  const plan = planRoute({
-    city,
-    pois,
-    theme,
-    start,
-    startLabel,
-    hours: preset.hours,
-    maxKm: preset.maxKm,
-    maxStops: preset.maxStops,
-    wet: Boolean(weather?.wet),
-  });
+  const plan =
+    customPicks === null
+      ? planRoute({
+          city,
+          pois,
+          theme,
+          start,
+          startLabel,
+          hours: preset.hours,
+          maxKm: preset.maxKm,
+          maxStops: preset.maxStops,
+          wet: Boolean(weather?.wet),
+        })
+      : planCustomRoute(city, customPicks, start);
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-24 pt-6 sm:px-6">
@@ -71,7 +95,9 @@ export function RoutePlanner({ city }: { city: City }) {
           {city.name} gezi rotası
         </h1>
         <p className="mt-1 text-sm text-ink-500">
-          Sıralama, mesafeye göre en kısa yolu bulacak şekilde kuruldu.
+          {customPicks === null
+            ? "Sıralama, mesafeye göre en kısa yolu bulacak şekilde kuruldu."
+            : "Kendi seçtiğin yerler, en kısa sürüş sırasına dizildi."}
         </p>
       </header>
 

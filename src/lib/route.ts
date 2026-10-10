@@ -300,6 +300,77 @@ export function planRoute(input: PlanInput): RoutePlan {
   };
 }
 
+export const CUSTOM_MAX_STOPS = 12;
+
+/**
+ * Builds a route from the visitor's own picks. Unlike planRoute there is no
+ * theme filter, no trimming and no weather downgrade: the visitor chose these
+ * stops, so all of them stay. The visit order is still optimized for the drive.
+ */
+export function planCustomRoute(
+  city: City,
+  picked: Poi[],
+  start: LatLon,
+): RoutePlan {
+  const trimmed = picked.length > CUSTOM_MAX_STOPS;
+  const chosen = picked.slice(0, CUSTOM_MAX_STOPS);
+
+  if (chosen.length === 0) {
+    return {
+      city,
+      theme: "genel",
+      stops: [],
+      totalKm: 0,
+      totalDriveMinutes: 0,
+      totalMinutes: 0,
+      indoorRatio: 0,
+      weatherApplied: false,
+      notes: ["Henüz yer seçmedin."],
+    };
+  }
+
+  const { order } = optimizeRoute(
+    chosen.map((p) => ({ lat: p.lat, lon: p.lon })),
+    start,
+  );
+
+  let km = 0;
+  const stops: RouteStop[] = order.map((idx, i) => {
+    const poi = chosen[idx];
+    const prev = i === 0 ? start : chosen[order[i - 1]];
+    const d = haversineKm(prev, poi);
+    km += d;
+    return {
+      ...poi,
+      index: i + 1,
+      distanceFromPrevKm: +d.toFixed(2),
+      driveMinutes: Math.max(1, travelMinutes(d)),
+    };
+  });
+
+  const totalDriveMinutes = travelMinutes(km);
+  const indoorCount = stops.filter((s) => s.indoor).length;
+  const notes = [
+    `Kendi seçiminle kuruldu: ${stops.length} durak · ${km.toFixed(1)} km.`,
+  ];
+  if (trimmed) {
+    notes.push(`Seçtiklerinden ilk ${CUSTOM_MAX_STOPS} yer rotaya alındı.`);
+  }
+
+  return {
+    city,
+    theme: "genel",
+    stops,
+    totalKm: +km.toFixed(1),
+    totalDriveMinutes,
+    totalMinutes:
+      stops.reduce((a, s) => a + s.duration, 0) + totalDriveMinutes,
+    indoorRatio: stops.length ? indoorCount / stops.length : 0,
+    weatherApplied: false,
+    notes,
+  };
+}
+
 /**
  * Applies a visitor's own stop order. `origin` has to be the real starting
  * point, otherwise the first leg is measured from the city centre.
