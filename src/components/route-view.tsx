@@ -25,6 +25,13 @@ export function RouteView({
 }) {
   const [stops, setStops] = useState<RouteStop[]>(plan.stops);
   const [removed, setRemoved] = useState<string[]>([]);
+  // Apple Haritalar yalnızca Apple cihazlarda anlamlı; Android'de (APK dahil)
+  // ölü buton olmasın diye iOS'ta gösterilir.
+  const [isIOS] = useState(
+    () =>
+      typeof navigator !== "undefined" &&
+      /iPad|iPhone|iPod/.test(navigator.userAgent),
+  );
 
   const stats = useMemo(() => {
     const km = stops.reduce((acc, s, i) => {
@@ -266,14 +273,16 @@ export function RouteView({
           🗺️ Rotayı Google Haritalar&apos;da aç
         </a>
         {/* The empty route returned above, so there is always at least one stop here. */}
-        <a
-          href={appleMapsUrl(startPoint, points)}
-          target="_blank"
-          rel="noreferrer"
-          className="block rounded-2xl border border-sand-200 bg-white px-5 py-3 text-center text-sm font-medium text-ink-700 transition hover:border-ink-400"
-        >
-          {points.length > 1 ? "Apple Haritalar&apos;da aç" : "Apple Haritalar&apos;nda gör"}
-        </a>
+        {isIOS && (
+          <a
+            href={appleMapsUrl(startPoint, points)}
+            target="_blank"
+            rel="noreferrer"
+            className="block rounded-2xl border border-sand-200 bg-white px-5 py-3 text-center text-sm font-medium text-ink-700 transition hover:border-ink-400"
+          >
+            {points.length > 1 ? "Apple Haritalar&apos;da aç" : "Apple Haritalar&apos;nda gör"}
+          </a>
+        )}
         <p className="text-center text-xs leading-relaxed text-ink-400">
           {points.length > 10
             ? `Uzun rotalar harita uygulamasında bölünebilir. İlk 10 durak tek listede açılır, kalanı için aynı butonu tekrar kullan.`

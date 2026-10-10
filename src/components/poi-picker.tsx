@@ -9,10 +9,16 @@ import { useMyLocation } from "@/components/use-my-location";
 
 const LIST_CAP = 80;
 
+/** Verideki ilk %10'luk dilim; "ünlü" rozeti için eşik. */
+const FAMOUS_AT = 50;
+
+type Sort = "unlu" | "az";
+
 export function PoiPicker({ city }: { city: City }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Theme | "tumu">("tumu");
+  const [sort, setSort] = useState<Sort>("unlu");
   const [selected, setSelected] = useState<string[]>([]);
   const [start, setStart] = useState<"center" | "here">("center");
   const { coords, error, loading, request } = useMyLocation();
@@ -27,14 +33,17 @@ export function PoiPicker({ city }: { city: City }) {
 
   const results = useMemo(() => {
     const q = query.trim().toLocaleLowerCase("tr");
-    return pois.filter(
+    const list = pois.filter(
       (p) =>
         (filter === "tumu" || p.theme === filter) &&
         (!q ||
           p.name.toLocaleLowerCase("tr").includes(q) ||
           p.district?.toLocaleLowerCase("tr").includes(q)),
     );
-  }, [pois, filter, query]);
+    return sort === "az"
+      ? [...list].sort((a, b) => a.name.localeCompare(b.name, "tr"))
+      : [...list].sort((a, b) => b.priority - a.priority);
+  }, [pois, filter, query, sort]);
 
   const shown = results.slice(0, LIST_CAP);
   const full = selected.length >= CUSTOM_MAX_STOPS;
@@ -87,6 +96,31 @@ export function PoiPicker({ city }: { city: City }) {
         placeholder="Yer ara (ör. müze, çarşı)..."
         className="w-full rounded-2xl border border-sand-200 bg-white px-4 py-3 text-sm outline-none placeholder:text-ink-400 focus:border-terra-500"
       />
+
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => setSort("unlu")}
+          aria-pressed={sort === "unlu"}
+          className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+            sort === "unlu"
+              ? "border-aegean-500 bg-aegean-500/5 text-ink-900 ring-1 ring-aegean-500"
+              : "border-sand-200 bg-white text-ink-500"
+          }`}
+        >
+          ★ Önce ünlüler
+        </button>
+        <button
+          onClick={() => setSort("az")}
+          aria-pressed={sort === "az"}
+          className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+            sort === "az"
+              ? "border-aegean-500 bg-aegean-500/5 text-ink-900 ring-1 ring-aegean-500"
+              : "border-sand-200 bg-white text-ink-500"
+          }`}
+        >
+          A–Z
+        </button>
+      </div>
 
       <div className="flex flex-wrap gap-2">
         <button
@@ -153,7 +187,12 @@ export function PoiPicker({ city }: { city: City }) {
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-sm font-medium text-ink-900">
-                    {p.name}
+                    {p.name}{" "}
+                    {p.priority >= FAMOUS_AT && (
+                      <span className="ml-1 rounded-full bg-amber-100 px-1.5 py-0.5 align-middle text-[10px] font-bold text-amber-800">
+                        ★ Ünlü
+                      </span>
+                    )}
                   </span>
                   <span className="mt-0.5 block text-xs text-ink-400">
                     {theme?.icon} {theme?.label} · {p.duration} dk
