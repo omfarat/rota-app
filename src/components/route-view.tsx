@@ -8,18 +8,15 @@ import { THEMES } from "@/lib/types";
 import type { RoutePlan, RouteStop } from "@/lib/route";
 import { formatDuration, haversineKm, reorder, travelMinutes } from "@/lib/route";
 import { googleMapsUrl, appleMapsUrl, osmUrl } from "@/lib/maps";
-import type { Weather } from "@/lib/weather";
 
 const themeOf = (id: Theme) => THEMES.find((t) => t.id === id)!;
 
 export function RouteView({
   plan,
-  weather,
   startPoint,
   startLabel,
 }: {
   plan: RoutePlan;
-  weather: Weather | null;
   startPoint: { lat: number; lon: number };
   startLabel: string;
 }) {
@@ -105,30 +102,6 @@ export function RouteView({
         <Stat label="Araçla" value={formatDuration(stats.drive)} />
         <Stat label="Yerinde" value={formatDuration(stats.visit)} />
       </section>
-
-      {weather && (
-        <div className="rounded-2xl border border-sand-200 bg-white px-4 py-3">
-          <div className="flex flex-wrap items-center gap-x-2 text-sm">
-            <span className="font-medium">
-              {weather.temperatureC != null
-                ? `${Math.round(weather.temperatureC)}°C`
-                : "—"}
-            </span>
-            <span className="text-ink-500">{weather.label}</span>
-            {weather.precipitationChance != null && (
-              <span className="text-ink-400">
-                · yağış %{weather.precipitationChance}
-              </span>
-            )}
-            <span className="text-ink-400">· {startLabel}</span>
-          </div>
-          {plan.weatherApplied && (
-            <p className="mt-1.5 text-xs text-ink-400">
-              Hava durumu rotaya uygulandı.
-            </p>
-          )}
-        </div>
-      )}
 
       {plan.notes.map((note) => (
         <p
