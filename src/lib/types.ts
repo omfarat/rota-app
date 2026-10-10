@@ -9,6 +9,8 @@ export interface City {
   lon: number;
   summary: string | null;
   photo: string | null;
+  photoBy?: string | null;
+  photoLicense?: string | null;
   highlight: string | null;
   poiCount: number;
   themes: Theme[];
@@ -26,6 +28,9 @@ export interface Poi {
   district?: string;
   distanceKm?: number;
   image?: string;
+  imageBy?: string | null;
+  imageLicense?: string | null;
+  imageSource?: "commons" | "mapillary" | null;
   heritage?: string;
   description?: string;
 }

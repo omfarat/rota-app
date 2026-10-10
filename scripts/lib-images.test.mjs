@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { labelRelevance, scoreCandidate, wikidataTerms, RADIUS_M, LABEL_SCORE_MIN } from "./lib-images.mjs";
+import { labelRelevance, scoreCandidate, wikidataTerms, plainCredit, RADIUS_M, LABEL_SCORE_MIN } from "./lib-images.mjs";
 
 const rejects = (label, name) => labelRelevance(label, name) < LABEL_SCORE_MIN;
 
@@ -43,4 +43,15 @@ test("drops the type word first so the search still matches", () => {
   assert.equal(wikidataTerms("Büyük Saat Kulesi")[0], "Büyük Saat");
   assert.equal(wikidataTerms("Bitlis Kalesi")[0], "Bitlis");
   assert.equal(wikidataTerms("Büyük Saat Kulesi").length > 1, true);
+});
+
+test("plainCredit strips Commons author HTML to readable text", () => {
+  assert.equal(plainCredit(null), null);
+  assert.equal(plainCredit(""), null);
+  assert.equal(
+    plainCredit('<a href="https://commons.wikimedia.org/wiki/User:X">X</a>'),
+    "X",
+  );
+  assert.equal(plainCredit("Anatolianpride"), "Anatolianpride");
+  assert.ok((plainCredit("a".repeat(200))?.length ?? 0) <= 80);
 });

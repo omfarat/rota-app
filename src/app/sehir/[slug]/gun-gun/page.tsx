@@ -10,6 +10,7 @@ import { notFound } from 'next/navigation';
 import { getCity } from '@/lib/data';
 import { buildItinerary } from '@/lib/itinerary';
 import { THEMES } from '@/lib/types';
+import { PhotoCredit } from '@/components/photo-credit';
 
 export default async function ItineraryPage(
   props: PageProps<"/sehir/[slug]/gun-gun">,
@@ -98,8 +99,11 @@ export default async function ItineraryPage(
                       {THEMES.find((t) => t.id === s.theme)?.icon} {THEMES.find((t) => t.id === s.theme)?.label} · {s.duration} dk · {s.travelKmFromPrev.toFixed(1)} km ({s.travelMinFromPrev} dk)
                     </p>
                     {s.image && (
-                      <div className='relative mt-2 aspect-[3/2] w-full overflow-hidden rounded-2xl bg-sand-200 sm:w-64'>
-                        <Image src={s.image} alt={s.name} fill sizes='256px' className='object-cover' />
+                      <div className='mt-2 w-full sm:w-64'>
+                        <div className='relative aspect-[3/2] w-full overflow-hidden rounded-2xl bg-sand-200'>
+                          <Image src={s.image} alt={s.name} fill sizes='256px' className='object-cover' />
+                        </div>
+                        <PhotoCredit by={s.imageBy} license={s.imageLicense} />
                       </div>
                     )}
                   </div>

@@ -220,6 +220,64 @@ async function wikidataEntities(ids, seen) {
 }
 
 /**
+ * Strips the HTML Commons wraps Artist/credit strings in, leaving plain text.
+ * Entities are decoded; overlong credits are cut so a card stays a card.
+ */
+export function plainCredit(html, max = 80) {
+  if (!html) return null;
+  const text = html
+    .replace(/<a\b[^>]*>(.*?)<\/a>/gi, "$1")
+    .replace(/<[^>]*>/g, "")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;|&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!text) return null;
+  return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
+}
+
+/**
+ * Attribution for Commons files, keyed like commonsThumbs: { title: { by, license } }.
+ *
+ * Commercial use of Commons photos is free, but CC licences require credit, so
+ * every stored photo needs its author and short licence name next to it.
+ */
+export async function commonsCredits(filenames) {
+  const names = [...new Set(filenames)].filter(Boolean);
+  const out = {};
+  const norm = (s) => s.replace(/_/g, " ");
+
+  for (let i = 0; i < names.length; i += 40) {
+    const chunk = names.slice(i, i + 40);
+    const requested = new Map(chunk.map((n) => [norm(n), n]));
+    const url =
+      "https://commons.wikimedia.org/w/api.php?action=query&format=json&prop=imageinfo" +
+      "&iiprop=extmetadata&iiextmetadatafilter=Artist|LicenseShortName" +
+      "&titles=" +
+      encodeURIComponent(chunk.map((n) => `File:${n}`).join("|"));
+    let json;
+    try {
+      json = await apiJson(url);
+    } catch {
+      continue;
+    }
+    for (const page of Object.values(json.query?.pages || {})) {
+      const meta = page.imageinfo?.[0]?.extmetadata;
+      if (!meta) continue;
+      const title = requested.get(norm(page.title.replace(/^File:/, "")));
+      if (title === undefined) continue;
+      out[title] = {
+        by: plainCredit(meta.Artist?.value),
+        license: plainCredit(meta.LicenseShortName?.value, 24),
+      };
+    }
+  }
+  return out;
+}
+/**
  * Resolves Commons file names to image URLs, 40 titles per request.
  *
  * The API answers a width request with a rendition it already has, and with the

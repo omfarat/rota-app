@@ -16,6 +16,8 @@
     "verify:images": "node scripts/verify-images.mjs",
     "data": "node scripts/fetch-data.mjs",
     "images": "node scripts/fill-images.mjs",
+    "images:credits": "node scripts/fill-credits.mjs",
+    "images:mapillary": "node scripts/fill-mapillary.mjs",
     "data:clear": "node -e \"require('fs').rmSync('.cache',{recursive:true,force:true})\""
   },
   "dependencies": {

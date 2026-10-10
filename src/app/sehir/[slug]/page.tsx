@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { allCities, getCity, hasData } from "@/lib/data";
 import { getPois } from "@/lib/pois";
 import { THEMES, type Theme } from "@/lib/types";
+import { PhotoCredit } from "@/components/photo-credit";
 import { PlanForm } from "@/components/plan-form";
 
 export function generateStaticParams() {
@@ -80,14 +81,14 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink-900/85 to-transparent p-5 pt-16">
           <p className="text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
             {city.region} · {city.plate}
-          </p>
-          <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl">
+          </p>          <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl">
             {city.name}
           </h1>
           <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-white/85">
             <span>{city.poiCount} gezilecek yer</span>
             {city.highlight && <span className="truncate">· {city.highlight}</span>}
           </p>
+          <PhotoCredit by={city.photoBy} license={city.photoLicense} className="mt-1 text-white/60" />
         </div>
       </div>
 
@@ -135,9 +136,12 @@ export default async function CityPage(props: PageProps<"/sehir/[slug]">) {
                         </div>
                       )}
                     </div>
-                    <p className="px-3 py-2 text-sm leading-snug font-medium">
+                    <p className="px-3 pt-2 text-sm leading-snug font-medium">
                       {poi.name}
                     </p>
+                    <div className="px-3 pb-2">
+                      <PhotoCredit by={poi.imageBy} license={poi.imageLicense} />
+                    </div>
                   </li>
                 ))}
               </ul>

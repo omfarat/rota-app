@@ -10,7 +10,7 @@
 // interrupted run resumes instead of starting over. The file only needs to be
 // refreshed when new POIs appear or the matching rules change.
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { findImage, commonsThumbs } from "./lib-images.mjs";
+import { findImage, commonsThumbs, commonsCredits } from "./lib-images.mjs";
 
 const POIS = "src/data/pois.json";
 const CACHE = ".cache/wdimg";
@@ -188,6 +188,9 @@ const thumbs = await commonsThumbs(matches.map((m) => m.best.file));
 if (!Object.keys(thumbs).length && matches.length) {
   console.log(`UYARI: commons thumbs hic donmedi (${Object.keys(thumbs).length}/${matches.length})`);
 }
+// CC licences require credit next to the photo, so the author and licence
+// travel with the URL from the start.
+const credits = await commonsCredits(matches.map((m) => m.best.file));
 let added = 0;
 let unresolved = 0;
 for (const { p, best } of matches) {
@@ -196,7 +199,11 @@ for (const { p, best } of matches) {
     unresolved++;
     continue;
   }
+  const c = credits[best.file];
   pois[p.slug][p.index].image = url;
+  pois[p.slug][p.index].imageBy = c?.by ?? null;
+  pois[p.slug][p.index].imageLicense = c?.license ?? null;
+  pois[p.slug][p.index].imageSource = "commons";
   added++;
 }
 

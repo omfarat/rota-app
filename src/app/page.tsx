@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { allCities, firstLetter } from "@/lib/data";
 import { CitySearch } from "@/components/city-search";
+import { PhotoCredit } from "@/components/photo-credit";
 
 export default function HomePage() {
   const cities = allCities();
@@ -80,6 +81,7 @@ export default function HomePage() {
                       <p className="mt-0.5 truncate text-xs text-ink-500">
                         {city.highlight ?? city.region}
                       </p>
+                      <PhotoCredit by={city.photoBy} license={city.photoLicense} />
                     </div>
                   </Link>
                 </li>

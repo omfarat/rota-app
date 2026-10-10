@@ -8,6 +8,7 @@ import { THEMES } from "@/lib/types";
 import type { RoutePlan, RouteStop } from "@/lib/route";
 import { formatDuration, haversineKm, reorder, travelMinutes } from "@/lib/route";
 import { googleMapsUrl, appleMapsUrl, osmUrl } from "@/lib/maps";
+import { PhotoCredit } from "@/components/photo-credit";
 
 const themeOf = (id: Theme) => THEMES.find((t) => t.id === id)!;
 
@@ -139,14 +140,17 @@ export function RouteView({
               <article className="overflow-hidden rounded-2xl border border-sand-200 bg-white">
                 <div className="flex gap-3 p-3">
                   {stop.image && (
-                    <div className="relative size-20 shrink-0 overflow-hidden rounded-xl bg-sand-200">
-                      <Image
-                        src={stop.image}
-                        alt={stop.name}
-                        fill
-                        sizes="80px"
-                        className="object-cover"
-                      />
+                    <div className="w-20 shrink-0">
+                      <div className="relative size-20 overflow-hidden rounded-xl bg-sand-200">
+                        <Image
+                          src={stop.image}
+                          alt={stop.name}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <PhotoCredit by={stop.imageBy} license={stop.imageLicense} />
                     </div>
                   )}
 
