@@ -86,7 +86,9 @@ export function RouteView({
   }
 
   const points = stops.map((s) => ({ lat: s.lat, lon: s.lon }));
-  const gmaps = googleMapsUrl(startPoint, points);
+  // Google'ın harita URL'si en fazla 9 ara nokta kabul eder: başlangıç + ilk
+  // 10 durak. Arayüzdeki notla aynı davranış.
+  const gmaps = googleMapsUrl(startPoint, points.slice(0, 10));
 
   return (
     <div className="space-y-6">
@@ -280,7 +282,7 @@ export function RouteView({
       </section>
 
       <Link
-        href={`/sehir/${plan.city.slug}`}
+        href={`/sehir/${plan.city.slug}/`}
         className="block rounded-2xl border border-sand-200 bg-white px-5 py-3 text-center text-sm font-medium text-ink-700 transition hover:border-ink-400"
       >
         Seçimleri değiştir
