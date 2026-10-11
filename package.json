@@ -18,12 +18,14 @@
     "images": "node scripts/fill-images.mjs",
     "images:credits": "node scripts/fill-credits.mjs",
     "images:mapillary": "node scripts/fill-mapillary.mjs",
+    "icons": "node scripts/make-icons.mjs",
     "data:clear": "node -e \"require('fs').rmSync('.cache',{recursive:true,force:true})\""
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
     "@capacitor/cli": "^7.4.3",
     "@capacitor/core": "^7.4.3",
+    "@capacitor/splash-screen": "^7.0.5",
     "next": "16.3.8",
     "react": "19.2.8",
     "react-dom": "19.2.8"

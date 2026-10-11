@@ -31,6 +31,7 @@ export interface Poi {
   imageBy?: string | null;
   imageLicense?: string | null;
   imageSource?: "commons" | "mapillary" | null;
+
   heritage?: string;
   description?: string;
 }

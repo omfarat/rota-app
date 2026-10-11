@@ -3,6 +3,14 @@
   "appName": "Rota",
   "webDir": "out",
   "bundledWebRuntime": false,
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "backgroundColor": "#1a1614",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    }
+  },
   "server": {
     "androidScheme": "https"
   }

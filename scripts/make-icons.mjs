@@ -16,6 +16,18 @@ const TARGETS = [
   { file: "public/icon-512.png", size: 512, scale: 0.8, purpose: "any" },
   { file: "public/icon-maskable-512.png", size: 512, scale: 0.56, purpose: "maskable" },
   { file: "public/apple-touch-icon.png", size: 180, scale: 0.72, purpose: "any" },
+  // Android launcher: her yoğunluğa tam kare siyah artwork. Uyarlanabilir
+  // simgede (anydpi-v26) zemin #1a1614, ön plan aynı artwork; ikisi aynı
+  // siyah olduğu için kesintisiz görünür.
+  ...[["mdpi", 48], ["hdpi", 72], ["xhdpi", 96], ["xxhdpi", 144], ["xxxhdpi", 192]].flatMap(
+    ([density, size]) => [
+      { file: `android/app/src/main/res/mipmap-${density}/ic_launcher.png`, size, scale: 1 },
+      { file: `android/app/src/main/res/mipmap-${density}/ic_launcher_round.png`, size, scale: 1 },
+    ],
+  ),
+  { file: "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png", size: 432, scale: 1 },
+  // Açılış ekranı: siyah zeminde ortalanmış küçük artwork.
+  { file: "android/app/src/main/res/drawable/splash.png", size: 1024, scale: 0.36 },
 ];
 
 const browser = await chromium.launch();
