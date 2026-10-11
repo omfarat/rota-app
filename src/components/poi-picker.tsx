@@ -1,10 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getPois } from "@/lib/pois";
 import { THEMES, type City, type Theme } from "@/lib/types";
 import { CUSTOM_MAX_STOPS, formatDuration } from "@/lib/route";
+import { PhotoCredit } from "@/components/photo-credit";
 import { useMyLocation } from "@/components/use-my-location";
 
 const LIST_CAP = 80;
@@ -199,6 +201,20 @@ export function PoiPicker({ city }: { city: City }) {
                     {p.district ? ` · ${p.district}` : ""}
                   </span>
                 </span>
+                {p.image && (
+                  <span className="w-14 shrink-0">
+                    <span className="relative block aspect-square w-14 overflow-hidden rounded-xl bg-sand-200">
+                      <Image
+                        src={p.image}
+                        alt=""
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                      />
+                    </span>
+                    <PhotoCredit by={p.imageBy} license={p.imageLicense} />
+                  </span>
+                )}
               </button>
             </li>
           );
