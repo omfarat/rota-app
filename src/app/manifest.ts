@@ -6,7 +6,7 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Rota — Türkiye şehir rotaları",
+    name: "Rota",
     short_name: "Rota",
     description: `Türkiye'nin ${allCities().length} ilinde gezilecek yerlerden en kısa araç rotasını oluştur.`,
     start_url: "/",

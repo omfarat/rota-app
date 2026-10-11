@@ -1,6 +1,6 @@
 ﻿{
   "appId": "com.rotasehir.app",
-  "appName": "Rota Şehir Rotası",
+  "appName": "Rota",
   "webDir": "out",
   "bundledWebRuntime": false,
   "server": {
